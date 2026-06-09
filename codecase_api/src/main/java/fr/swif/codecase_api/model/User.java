@@ -63,7 +63,7 @@ public class User {
   @Size(max = 8)
   @NotBlank
   @Column(name = "userRole")
-  private String userRole;
+  Role userRole;
 
   /**
    * Variable userDateCreationCompte
