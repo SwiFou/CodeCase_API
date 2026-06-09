@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -61,12 +62,14 @@ public class Post {
   /**
    * Variable userId
    */
+  @ManyToOne
   @JoinColumn(name = "userId")
   private User userId;
 
   /**
    * Variable langageId de type langage
    */
+  @ManyToOne
   @JoinColumn(name = "langageId")
   private Langage langageId;
 
