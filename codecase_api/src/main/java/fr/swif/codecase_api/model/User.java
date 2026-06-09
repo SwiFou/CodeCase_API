@@ -2,6 +2,8 @@ package fr.swif.codecase_api.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -62,6 +64,8 @@ public class User {
    */
   @Size(max = 8)
   @NotBlank
+  @Enumerated(EnumType.STRING) // Permet de stocker
+                              // "VISITEUR"/"USER"/"MODO"/"ADMIN" au lieu de 0/1
   @Column(name = "userRole")
   Role userRole;
 
