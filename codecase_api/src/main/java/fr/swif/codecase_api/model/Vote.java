@@ -40,7 +40,7 @@ public class Vote {
    */
   @Enumerated(EnumType.STRING) // Permet de stocker "LIKE"/"DISLIKE" au lieu de 0/1
   @Column(name = "voteType")
-  VoteType voteType;
+  private VoteType voteType;
 
   /**
    * Variable postId de la classe Post

@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
@@ -63,23 +64,23 @@ public class User {
    * Variable userRole
    */
   @Size(max = 8)
-  @NotBlank
+  @NotEmpty
   @Enumerated(EnumType.STRING) // Permet de stocker
                               // "VISITEUR"/"USER"/"MODO"/"ADMIN" au lieu de 0/1
   @Column(name = "userRole")
-  Role userRole;
+  private Role userRole;
 
   /**
    * Variable userDateCreationCompte
    */
-  @NotNull
+  @NotEmpty
   @Column(name = "userDateCreationCompte")
   private LocalDate userDateCreationCompte;
 
   /**
    * Variable userDerniereConnexion
    */
-  @NotNull
+  @NotEmpty
   @Column(name = "userDerniereConnexion")
   private LocalDate userDerniereConnexion;
 
