@@ -7,9 +7,9 @@ CREATE TABLE User_(
    userPseudo VARCHAR(50) NOT NULL,
    userMdp VARCHAR(20) NOT NULL,
    userDateCreationCompte DATE NOT NULL,
-   userDerniereConnexion DATE NOT NULL,
+   userDerniereConnexion DATETIME NOT NULL,
    userEmail VARCHAR(100) NOT NULL,
-   userRole VISITEUR, MEMBRE, ADMIN, MODO NOT NULL,
+   userRole ENUM('VISITEUR', 'MEMBRE', 'ADMIN', 'MODO') NOT NULL,
    userMfaActif BOOLEAN NOT NULL,
    userAvatar VARCHAR(250) NOT NULL,
    PRIMARY KEY(userId),
@@ -34,10 +34,10 @@ CREATE TABLE Technologie(
 
 CREATE TABLE Sanction(
    sanctionId INT AUTO_INCREMENT,
-   sanctionType AVERTISSEMENT, BANNISSEMENT_TEMPORAIRE, BANNISSEMENT_DEFINITIF NOT NULL,
-   sanctionStatut EN_COURS, LEVEE, EXPIREE NOT NULL,
+   sanctionType ENUM ('AVERTISSEMENT', 'BANNISSEMENT_TEMPORAIRE', 'BANNISSEMENT_DEFINITIF') NOT NULL,
+   sanctionStatut ENUM ('EN_COURS', 'LEVEE', 'EXPIREE') NOT NULL,
    sanctionDate DATE NOT NULL,
-   sanctionDateFin DATETIME,
+   sanctionDateFin DATETIME NOT NULL,
    sanctionMotif VARCHAR(100) NOT NULL,
    userId_MEMBRE INT NOT NULL,
    userId_MODO_ADMIN INT NOT NULL,
@@ -58,7 +58,7 @@ CREATE TABLE Post(
    postId INT AUTO_INCREMENT,
    postTitre VARCHAR(50) NOT NULL,
    postContenu VARCHAR(5000) NOT NULL,
-   postDateCreation DATE NOT NULL,
+   postDateCreation DATETIME NOT NULL,
    postDescription VARCHAR(100) NOT NULL,
    langageId INT NOT NULL,
    userId INT NOT NULL,
@@ -95,7 +95,7 @@ CREATE TABLE Signalement(
 
 CREATE TABLE Vote(
    voteId INT AUTO_INCREMENT,
-   voteType LIKE, DISLIKE NOT NULL,
+   voteType ENUM ('LIKE', 'DISLIKE') NOT NULL,
    postId INT NOT NULL,
    userId INT NOT NULL,
    PRIMARY KEY(voteId),
@@ -126,12 +126,12 @@ INSERT INTO codecase_stage.Langage (langageId, langageIntitule) VALUES(6, 'Php')
 INSERT INTO codecase_stage.Langage (langageId, langageIntitule) VALUES(1, 'Python');
 INSERT INTO codecase_stage.Langage (langageId, langageIntitule) VALUES(5, 'Ruby');
 
-INSERT INTO codecase.User_
+INSERT INTO codecase_stage.User_
 (userId, userPseudo, userMdp, userDateCreationCompte, userDerniereConnexion, userEmail, userRole, userMfaActif, userAvatar)
-VALUES(1, 'SwiF', 'Alexandre', '2026-04-15', '2026-04-15','alexandre@test.fr', 'MEMBRE', 'OUI', 'avatar.png');
+VALUES(1, 'SwiF', 'Alexandre', '2026-04-15', '2026-04-15','alexandre@test.fr', 'MEMBRE', '1', 'avatar.png');
 
 INSERT INTO codecase_stage.Technologie (technologieId, technologieIntitule, userId) VALUES(1, 'Springboot', 1);
 
-
-
-
+INSERT INTO codecase_stage.Post
+(postId, postTitre, postContenu, postDateCreation, postDescription, langageId, userId)
+VALUES (1, 'test', 'test test test', '2026-04-20 13:58:37.000000', 'Cest un test', 2, 1);
