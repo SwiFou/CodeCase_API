@@ -1,0 +1,137 @@
+create database codecase_stage;
+
+use codecase_stage;
+
+CREATE TABLE User_(
+   userId INT AUTO_INCREMENT,
+   userPseudo VARCHAR(50) NOT NULL,
+   userMdp VARCHAR(20) NOT NULL,
+   userDateCreationCompte DATE NOT NULL,
+   userDerniereConnexion DATE NOT NULL,
+   userEmail VARCHAR(100) NOT NULL,
+   userRole VISITEUR, MEMBRE, ADMIN, MODO NOT NULL,
+   userMfaActif BOOLEAN NOT NULL,
+   userAvatar VARCHAR(250) NOT NULL,
+   PRIMARY KEY(userId),
+   UNIQUE(userPseudo),
+   UNIQUE(userEmail)
+)ENGINE=InnoDB;
+
+CREATE TABLE Langage(
+   langageId INT AUTO_INCREMENT,
+   langageIntitule VARCHAR(30) NOT NULL,
+   PRIMARY KEY(langageId),
+   UNIQUE(langageIntitule)
+)ENGINE=InnoDB;
+
+CREATE TABLE Technologie(
+   technologieId INT AUTO_INCREMENT,
+   technologieIntitule VARCHAR(75),
+   userId INT NOT NULL,
+   PRIMARY KEY(technologieId),
+   FOREIGN KEY(userId) REFERENCES User_(userId)
+)ENGINE=InnoDB;
+
+CREATE TABLE Sanction(
+   sanctionId INT AUTO_INCREMENT,
+   sanctionType AVERTISSEMENT, BANNISSEMENT_TEMPORAIRE, BANNISSEMENT_DEFINITIF NOT NULL,
+   sanctionStatut EN_COURS, LEVEE, EXPIREE NOT NULL,
+   sanctionDate DATE NOT NULL,
+   sanctionDateFin DATETIME,
+   sanctionMotif VARCHAR(100) NOT NULL,
+   userId_MEMBRE INT NOT NULL,
+   userId_MODO_ADMIN INT NOT NULL,
+   PRIMARY KEY(sanctionId),
+   FOREIGN KEY(userId_MEMBRE) REFERENCES User_(userId),
+   FOREIGN KEY(userId_MODO_ADMIN) REFERENCES User_(userId)
+)ENGINE=InnoDB;
+
+CREATE TABLE Bibliotheque(
+   bibliothequeID INT AUTO_INCREMENT,
+   bibliothequeLibelle VARCHAR(20) NOT NULL,
+   userId INT NOT NULL,
+   PRIMARY KEY(bibliothequeID),
+   FOREIGN KEY(userId) REFERENCES User_(userId)
+)ENGINE=InnoDB;
+
+CREATE TABLE Post(
+   postId INT AUTO_INCREMENT,
+   postTitre VARCHAR(50) NOT NULL,
+   postContenu VARCHAR(5000) NOT NULL,
+   postDateCreation DATE NOT NULL,
+   postDescription VARCHAR(100) NOT NULL,
+   langageId INT NOT NULL,
+   userId INT NOT NULL,
+   PRIMARY KEY(postId),
+   FOREIGN KEY(langageId) REFERENCES Langage(langageId),
+   FOREIGN KEY(userId) REFERENCES User_(userId)
+)ENGINE=InnoDB;
+
+CREATE TABLE Commentaire(
+   commentaireId INT AUTO_INCREMENT,
+   commentaireDate DATE NOT NULL,
+   commentaireContenu VARCHAR(600) NOT NULL,
+   postId INT NOT NULL,
+   userId INT NOT NULL,
+   PRIMARY KEY(commentaireId),
+   FOREIGN KEY(postId) REFERENCES Post(postId),
+   FOREIGN KEY(userId) REFERENCES User_(userId)
+)ENGINE=InnoDB;
+
+CREATE TABLE Signalement(
+   signalementId INT AUTO_INCREMENT,
+   signalementDescription VARCHAR(100) NOT NULL,
+   signalementDate DATE NOT NULL,
+   technologieId INT,
+   postId INT,
+   commentaireId INT,
+   userId INT NOT NULL,
+   PRIMARY KEY(signalementId),
+   FOREIGN KEY(technologieId) REFERENCES Technologie(technologieId),
+   FOREIGN KEY(postId) REFERENCES Post(postId),
+   FOREIGN KEY(commentaireId) REFERENCES Commentaire(commentaireId),
+   FOREIGN KEY(userId) REFERENCES User_(userId)
+)ENGINE=InnoDB;
+
+CREATE TABLE Vote(
+   voteId INT AUTO_INCREMENT,
+   voteType LIKE, DISLIKE NOT NULL,
+   postId INT NOT NULL,
+   userId INT NOT NULL,
+   PRIMARY KEY(voteId),
+   FOREIGN KEY(postId) REFERENCES Post(postId),
+   FOREIGN KEY(userId) REFERENCES User_(userId)
+)ENGINE=InnoDB;
+
+CREATE TABLE Concerner(
+   postId INT,
+   technologieId INT,
+   PRIMARY KEY(postId, technologieId),
+   FOREIGN KEY(postId) REFERENCES Post(postId),
+   FOREIGN KEY(technologieId) REFERENCES Technologie(technologieId)
+)ENGINE=InnoDB;
+
+CREATE TABLE Etre_dans(
+   postId INT,
+   bibliothequeID INT,
+   PRIMARY KEY(postId, bibliothequeID),
+   FOREIGN KEY(postId) REFERENCES Post(postId),
+   FOREIGN KEY(bibliothequeID) REFERENCES Bibliotheque(bibliothequeID)
+)ENGINE=InnoDB;
+
+INSERT INTO codecase_stage.Langage (langageId, langageIntitule) VALUES(3, 'CSS');
+INSERT INTO codecase_stage.Langage (langageId, langageIntitule) VALUES(4, 'HTML');
+INSERT INTO codecase_stage.Langage (langageId, langageIntitule) VALUES(2, 'Java');
+INSERT INTO codecase_stage.Langage (langageId, langageIntitule) VALUES(6, 'Php');
+INSERT INTO codecase_stage.Langage (langageId, langageIntitule) VALUES(1, 'Python');
+INSERT INTO codecase_stage.Langage (langageId, langageIntitule) VALUES(5, 'Ruby');
+
+INSERT INTO codecase.User_
+(userId, userPseudo, userMdp, userDateCreationCompte, userDerniereConnexion, userEmail, userRole, userMfaActif, userAvatar)
+VALUES(1, 'SwiF', 'Alexandre', '2026-04-15', '2026-04-15','alexandre@test.fr', 'MEMBRE', 'OUI', 'avatar.png');
+
+INSERT INTO codecase_stage.Technologie (technologieId, technologieIntitule, userId) VALUES(1, 'Springboot', 1);
+
+
+
+
