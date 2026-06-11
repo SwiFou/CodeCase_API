@@ -22,7 +22,9 @@ import lombok.Data;
  * @since 09/06/2026
  */
 
+// @Data est l'équivalent de @Getter @Setter @RequiredArgsConstructor @ToString @EqualsAndHashCode
 @Data
+// @Entity indique à Hibernate (ou tout autre provider JPA) que la classe Java est mappée à une table en base de données
 @Entity
 @Table(name = "Technologie")
 public class Technologie {
