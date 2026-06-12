@@ -1,5 +1,6 @@
 package fr.swif.codecase_api.controller;
 
+import fr.swif.codecase_api.exception.ExceptionManager;
 import fr.swif.codecase_api.model.Langage;
 import fr.swif.codecase_api.model.Post;
 import fr.swif.codecase_api.model.User;
@@ -39,6 +40,16 @@ public class UserRestController {
 
   private final PostService postService;
 
+  /**
+   * Méthode pour la création d'un post
+   *
+   *<i>de UserRestController</i>
+   *<h1></h1>
+   *<hr>
+   *<p></p>
+   * @param post
+   * @return
+   */
   @PostMapping("/post")
   public ResponseEntity<Post> createPost(@RequestBody Post post) {
     try {
@@ -48,6 +59,15 @@ public class UserRestController {
     }
   }
 
+  /**
+   * Méthode pour lister tous les posts
+   *
+   *<i>de UserRestController</i>
+   *<h1></h1>
+   *<hr>
+   *<p></p>
+   * @return
+   */
   @GetMapping("/posts")
   public ResponseEntity<Iterable<Post>> getPosts() {
     try {
@@ -58,6 +78,16 @@ public class UserRestController {
     }
   }
 
+  /**
+   * Méthode pour lister un post par rapport à son id
+   *
+   *<i>de UserRestController</i>
+   *<h1></h1>
+   *<hr>
+   *<p></p>
+   * @param id
+   * @return
+   */
   @GetMapping("/post/{id}")
   public ResponseEntity<Post> getPost(@PathVariable("id") int id) {
     try {
@@ -65,32 +95,23 @@ public class UserRestController {
       if(post.isPresent()) {
         return ResponseEntity.ok(post.get());
       } else {
-        return new ResponseEntity<>("Post non présent", HttpStatus.NOT_FOUND);
+        return new ResponseEntity("Post non présent", HttpStatus.NOT_FOUND);
       }
     } catch (Exception e) {
       return ExceptionManager.handleException(e);
     }
   }
 
-  @PutMapping("/post/{id}")
-  public ResponseEntity<Post> updatePost(@PathVariable("id") int id,
-    @RequestBody Post post) {
-
-    try {
-      Optional<Post> temp = postService.getPost(id);
-
-      if(temp.isPresent()) {
-        Post current = temp.get();
-
-        String titrePost = post.getPostTitre();
-        String descriptionPost = post.getPostDescription();
-        User user = post.getUserId();
-        String contenuPost = post.getPostContenu();
-        Langage langagePost = post.getLangageId();
-      }
-    }
-  }
-
+  /**
+   * Méthode pour supprimer un post par rapport à son id
+   *
+   *<i>de UserRestController</i>
+   *<h1></h1>
+   *<hr>
+   *<p></p>
+   * @param id
+   * @return
+   */
   @DeleteMapping("/post/{id}")
   public ResponseEntity<String> deletePost(@PathVariable("id") int id) {
     try {
