@@ -1,9 +1,7 @@
 package fr.swif.codecase_api.controller;
 
 import fr.swif.codecase_api.exception.ExceptionManager;
-import fr.swif.codecase_api.model.Langage;
 import fr.swif.codecase_api.model.Post;
-import fr.swif.codecase_api.model.User;
 import fr.swif.codecase_api.service.PostService;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
  * UserRestController
  * <i>de fr.swif.codecase_api.controller</i>
  * <hr>
- * <p></p>
+ * <p>Controller REST pour les endpoints Post</p>
  *
  * @author Calderoli Alexandre
  * @version 0.0.1
@@ -36,7 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 // @RequiredArgsConstructor génère automatiquement un constructeur prenant en paramètre tous les champs final et @NonNull de la classe
 @RequiredArgsConstructor
-public class UserRestController {
+public class PostRestController {
 
   private final PostService postService;
 
