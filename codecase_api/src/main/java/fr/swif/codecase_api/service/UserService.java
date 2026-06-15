@@ -45,6 +45,7 @@ public class UserService {
    * représente "quelque chose qu'on peut parcourir élément par élément"
    * Comme une arraylist mais peut parcourir n'importe quelle collection.
    */
+  // Iterable → Interface qui peut être parcourue
   public Iterable<User> getUsers() {
     return userRepository.findAll();
   }
@@ -60,6 +61,7 @@ public class UserService {
    * @return Un Optional de User qui sert à gérer explicitement null au lieu
    * d'avoir une erreur NullPointerException → "cette méthode peut ne rien retourner, gère-le".
    */
+  // Optional → Conteneur qui contient soit une valeur, soit rien
   public Optional<User> getUser(int id) {
     return userRepository.findById(id);
   }
@@ -74,6 +76,7 @@ public class UserService {
    * @param user le User à créer ou modifier
    * @return Le User créé ou modifié
    */
+  // @Transactional surcharge le readOnly
   @Transactional
   public User saveUser(User user) {
     return userRepository.save(user);
@@ -88,10 +91,50 @@ public class UserService {
    *<p>Prend l'id d'un User et le supprime grâce à deleteById()</p>
    * @param id L'id du User à supprimer
    */
+  // @Transactional surcharge le readOnly
   @Transactional
   public void deleteUser(int id) {
     userRepository.deleteById(id);
   }
 
+  /**
+   * Méthode anonymisationUser
+   *
+   *<i>de UserService</i>
+   *<h1></h1>
+   *<hr>
+   *<p>Prend l'id d'un User et anonymise les informations suivantes :
+   * Pseudo, Mot de passe, Email</p>
+   * @param id L'id du User à anonymiser
+   */
+  // @Transactional surcharge le readOnly
+  @Transactional
+  public void anonymisationUser(int id) {
+
+    Optional<User> user = getUser(id);
+
+    if(user.isPresent()) {
+
+      User userExistant = user.get();
+
+      String userPseudo = userExistant.getUserPseudo();
+      String userMdp = userExistant.getUserMdp();
+      String userEmail = userExistant.getUserEmail();
+
+      if(userPseudo != null) {
+        userExistant.setUserPseudo("Utilisateur supprimé");
+      }
+
+      // Permet de remplacer le hash du mot de passe valide en
+      // un hash invalide et inutilisable
+      if(userMdp != null) {
+        userExistant.setUserMdp("{erased}");
+      }
+
+      if(userEmail != null) {
+        userExistant.setUserEmail("deleted-" + id + "@anonymized.invalid");
+      }
+    }
+  }
 
 }

@@ -44,6 +44,7 @@ public class PostService {
    * représente "quelque chose qu'on peut parcourir élément par élément"
    * Comme une Arraylist mais peut parcourir n'importe quelle collection.
    */
+  // Iterable → Interface qui peut être parcourue
   public Iterable<Post> getPosts() {
     return postRepository.findAll();
   }
@@ -58,6 +59,7 @@ public class PostService {
    * @return Un Optional de Post qui sert à gérer explicitement null au lieu
    * d'avoir une erreur NullPointerException → "cette méthode peut ne rien retourner, gère-le".
    */
+  // Optional → Conteneur qui contient soit une valeur, soit rien
   public Optional<Post> getPost(int id) {
     return postRepository.findById(id);
   }
@@ -71,6 +73,7 @@ public class PostService {
    * @param post le Post à créer ou modifier
    * @return Le Post créé ou modifié
    */
+  // @Transactional surcharge le readOnly
   @Transactional
   public Post savePost(Post post) {
     return postRepository.save(post);
@@ -84,6 +87,7 @@ public class PostService {
    *<p>Prend l'id d'un Post et le supprime grâce à deleteById()</p>
    * @param id L'id du Post à supprimer
    */
+  // @Transactional surcharge le readOnly
   @Transactional
   public void deletePost(int id) {
     postRepository.deleteById(id);
