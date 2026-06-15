@@ -73,7 +73,7 @@ public class PostService {
    * @param post le Post à créer ou modifier
    * @return Le Post créé ou modifié
    */
-  // @Transactional surcharge le readOnly
+  // @Transactional surcharge le readOnly de la classe
   @Transactional
   public Post savePost(Post post) {
     return postRepository.save(post);
@@ -87,7 +87,7 @@ public class PostService {
    *<p>Prend l'id d'un Post et le supprime grâce à deleteById()</p>
    * @param id L'id du Post à supprimer
    */
-  // @Transactional surcharge le readOnly
+  // @Transactional surcharge le readOnly de la classe
   @Transactional
   public void deletePost(int id) {
     postRepository.deleteById(id);

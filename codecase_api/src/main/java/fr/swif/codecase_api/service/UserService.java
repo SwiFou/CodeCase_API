@@ -76,10 +76,48 @@ public class UserService {
    * @param user le User à créer ou modifier
    * @return Le User créé ou modifié
    */
-  // @Transactional surcharge le readOnly
+  // @Transactional surcharge le readOnly de la classe
   @Transactional
   public User saveUser(User user) {
     return userRepository.save(user);
+  }
+
+  /**
+   * Méthode updateUser
+   *
+   *<i>de UserService</i>
+   *<h1></h1>
+   *<hr>
+   *<p>Prend l'id d'un User et met à jour les informations suivantes :
+   * Email, Mot de passe, Avatar</p>
+   * @param id
+   * @return
+   */
+  @Transactional
+  public User updateUser(int id) {
+
+    Optional<User> user = getUser(id);
+
+    if(user.isPresent()) {
+
+      User userActuel = user.get();
+
+      String userEmail = userActuel.getUserEmail();
+      String userMdp = userActuel.getUserMdp();
+      String userAvatar = userActuel.getUserAvatar();
+
+      if(userEmail != null) {
+        userActuel.setUserEmail(userEmail);
+      }
+
+      if(userMdp != null) {
+        userActuel.setUserMdp(userMdp);
+      }
+
+      if(userAvatar != null) {
+        userActuel.setUserAvatar(userAvatar);
+      }
+    }
   }
 
   /**
@@ -91,7 +129,7 @@ public class UserService {
    *<p>Prend l'id d'un User et le supprime grâce à deleteById()</p>
    * @param id L'id du User à supprimer
    */
-  // @Transactional surcharge le readOnly
+  // @Transactional surcharge le readOnly de la classe
   @Transactional
   public void deleteUser(int id) {
     userRepository.deleteById(id);
@@ -107,7 +145,7 @@ public class UserService {
    * Pseudo, Mot de passe, Email</p>
    * @param id L'id du User à anonymiser
    */
-  // @Transactional surcharge le readOnly
+  // @Transactional surcharge le readOnly de la classe
   @Transactional
   public void anonymisationUser(int id) {
 
@@ -122,7 +160,7 @@ public class UserService {
       String userEmail = userExistant.getUserEmail();
 
       if(userPseudo != null) {
-        userExistant.setUserPseudo("Utilisateur supprimé");
+        userExistant.setUserPseudo("Utilisateur supprimé-" + id);
       }
 
       // Permet de remplacer le hash du mot de passe valide en

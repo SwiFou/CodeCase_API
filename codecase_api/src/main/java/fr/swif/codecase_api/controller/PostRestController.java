@@ -26,8 +26,8 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 // @RestController est une combinaison de :
-// @Controller qui marque la classe comme composant Spring MVC gérant les requêtes HTTP
-// et de @ResponseBody qui indique que la valeur retournée par chaque méthode
+// - @Controller qui marque la classe comme composant Spring MVC gérant les requêtes HTTP
+// - @ResponseBody qui indique que la valeur retournée par chaque méthode
 // est sérialisée directement dans le corps de la réponse HTTP
 // (JSON par défaut avec Jackson), au lieu d'être interprétée comme un nom de vue Thymeleaf/JSP
 @RestController
@@ -43,7 +43,7 @@ public class PostRestController {
    *<i>de UserRestController</i>
    *<h1></h1>
    *<hr>
-   *<p></p>
+   *<p>Création d'un post</p>
    * @param post
    * @return
    */
@@ -62,7 +62,7 @@ public class PostRestController {
    *<i>de UserRestController</i>
    *<h1></h1>
    *<hr>
-   *<p></p>
+   *<p>Liste tous les posts</p>
    * @return
    */
   @GetMapping("/posts")
@@ -81,7 +81,7 @@ public class PostRestController {
    *<i>de UserRestController</i>
    *<h1></h1>
    *<hr>
-   *<p></p>
+   *<p>Liste un post par rapport à son id</p>
    * @param id
    * @return
    */
@@ -105,7 +105,7 @@ public class PostRestController {
    *<i>de UserRestController</i>
    *<h1></h1>
    *<hr>
-   *<p></p>
+   *<p>Supprime un post par rapport à son id</p>
    * @param id
    * @return
    */

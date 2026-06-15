@@ -40,7 +40,11 @@ public class ExceptionManager {
    */
   public static ResponseEntity handleException(Exception ex) {
 
-    if (ex instanceof SQLException) {
+    if (ex instanceof CodeCaseException) {
+      CodeCaseException cx = (CodeCaseException) ex;
+      return new ResponseEntity<>(cx.getMessage(), cx.getStatus());
+    }
+    else if (ex instanceof SQLException) {
       SQLException sx = (SQLException) ex;
       return handleSQL(sx);
     }
