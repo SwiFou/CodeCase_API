@@ -2,10 +2,9 @@ package fr.swif.codecase_api.service;
 
 import fr.swif.codecase_api.model.Post;
 import fr.swif.codecase_api.repository.PostRepository;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 /**
@@ -24,6 +23,13 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 // @Service sert à indiquer que la classe détient la logique métier du CRUD
 @Service
+// @Transactional permet de garantir une transaction :
+// - Si tout se passe bien → COMMIT automatique à la fin
+// - Si une exception est levée → ROLLBACK automatique (tout est annulé)
+// Ici mis en readOnly par défaut pour les méthodes findAll() et findById()
+// qui indique que celles-ci ne sont pas destinées à être modifées, donc réduit
+// les traitements internes et accorde des optimisations de performances
+@Transactional(readOnly = true)
 public class PostService {
 
   private final PostRepository postRepository;
@@ -65,6 +71,7 @@ public class PostService {
    * @param post le Post à créer ou modifier
    * @return Le Post créé ou modifié
    */
+  @Transactional
   public Post savePost(Post post) {
     return postRepository.save(post);
   }
@@ -77,6 +84,7 @@ public class PostService {
    *<p>Prend l'id d'un Post et le supprime grâce à deleteById()</p>
    * @param id L'id du Post à supprimer
    */
+  @Transactional
   public void deletePost(int id) {
     postRepository.deleteById(id);
   }

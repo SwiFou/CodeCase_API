@@ -16,6 +16,7 @@ import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.PathVariable;
 
 /**
  * User
@@ -45,6 +46,7 @@ public class User {
   /**
    * Variable userPseudo
    */
+  @PersonalData(usage = "personalisation", categorie = "contact")
   @Size(min = 3, max = 20)
   @Column(name = "userPseudo")
   private String userPseudo;
@@ -52,12 +54,14 @@ public class User {
   /**
    * Variable userMdp
    */
+  @PersonalData(usage = "authentification", categorie = "contact")
   @Column(name = "userMdp")
   private String userMdp;
 
   /**
    * Variable userEmail
    */
+  @PersonalData(usage = "authentification", categorie = "contact")
   @Email
   @Column(name = "userEmail")
   private String userEmail;

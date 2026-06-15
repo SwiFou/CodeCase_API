@@ -2,6 +2,7 @@ package fr.swif.codecase_api.service;
 
 import fr.swif.codecase_api.model.User;
 import fr.swif.codecase_api.repository.UserRepository;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,13 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 // @Service sert à indiquer que la classe détient la logique métier du CRUD
 @Service
+// @Transactional permet de garantir une transaction :
+// - Si tout se passe bien → COMMIT automatique à la fin
+// - Si une exception est levée → ROLLBACK automatique (tout est annulé)
+// Ici mis en readOnly par défaut pour les méthodes findAll() et findById()
+// qui indique que celles-ci ne sont pas destinées à être modifées, donc réduit
+// les traitements internes et accorde des optimisations de performances
+@Transactional(readOnly = true)
 public class UserService {
 
   private final UserRepository userRepository;
@@ -66,6 +74,7 @@ public class UserService {
    * @param user le User à créer ou modifier
    * @return Le User créé ou modifié
    */
+  @Transactional
   public User saveUser(User user) {
     return userRepository.save(user);
   }
@@ -79,6 +88,7 @@ public class UserService {
    *<p>Prend l'id d'un User et le supprime grâce à deleteById()</p>
    * @param id L'id du User à supprimer
    */
+  @Transactional
   public void deleteUser(int id) {
     userRepository.deleteById(id);
   }
