@@ -84,7 +84,7 @@ public class Post {
   /**
    * Variable creationDatePost
    */
-  @Column(name = "creationDatePost")
-  private LocalDateTime creationDatePost;
+  @Column(name = "postDateCreation")
+  private LocalDateTime postDateCreation;
 
 }
