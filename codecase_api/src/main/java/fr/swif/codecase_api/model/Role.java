@@ -2,7 +2,7 @@ package fr.swif.codecase_api.model;
 
 public enum Role {
   VISITEUR,
-  USER,
+  MEMBRE,
   MODO,
   ADMIN
 }
