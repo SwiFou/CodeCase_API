@@ -7,9 +7,11 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,7 +40,7 @@ public class UserRestController {
   private final UserService userService;
 
   /**
-   * Méthode pour la création d'un User
+   * Méthode pour la création d'un User.
    *
    *<i>de UserRestController</i>
    *<h1></h1>
@@ -57,7 +59,7 @@ public class UserRestController {
   }
 
   /**
-   * Méthode pour lister tous les Users
+   * Méthode pour lister tous les Users.
    *
    *<i>de UserRestController</i>
    *<h1>Liste tous les Users</h1>
@@ -76,7 +78,7 @@ public class UserRestController {
   }
 
   /**
-   * Méthode pour lister un User par rapport à son id
+   * Méthode pour lister un User par rapport à son id.
    *
    *<i>de UserRestController</i>
    *<h1></h1>
@@ -88,16 +90,69 @@ public class UserRestController {
   @GetMapping("/user/{id}")
   public ResponseEntity<User> getUser(@PathVariable("id") int id) {
     try {
-      Optional<User> user = userService.getUser(id);
-      if(user.isPresent()) {
-        return ResponseEntity.ok(user.get());
-      } else {
-        return new ResponseEntity("User non présent", HttpStatus.NOT_FOUND);
-      }
+      return ResponseEntity.ok(userService.getUser(id));
     } catch (Exception e) {
       return ExceptionManager.handleException(e);
     }
   }
 
+  /**
+   * Méthode pour mettre à jour les données d'un User
+   *
+   *<i>de UserRestController</i>
+   *<h1></h1>
+   *<hr>
+   *<p>Met à jour les données d'un User</p>
+   * @param id
+   * @param user
+   * @return
+   */
+  @PutMapping("/user/{id}")
+  public ResponseEntity<User> updateUser(@PathVariable("id") int id, @RequestBody User user) {
+    try {
+      return ResponseEntity.ok(userService.updateUser(id, user));
+    } catch (Exception e) {
+      return ExceptionManager.handleException(e);
+    }
+  }
 
+  /**
+   * Méthode pour anonymiser un User
+   *
+   *<i>de UserRestController</i>
+   *<h1></h1>
+   *<hr>
+   *<p>Anonymise un User</p>
+   * @param id
+   * @return
+   */
+  @PutMapping("/user_anonym/{id}")
+  public ResponseEntity<String> anonymisationUser(@PathVariable("id") int id) {
+    try {
+      userService.anonymisationUser(id);
+      return ResponseEntity.ok("Utilisateur anonymisé avec succès");
+    } catch (Exception e) {
+      return ExceptionManager.handleException(e);
+    }
+  }
+
+  /**
+   * Méthode pour supprimer un User
+   *
+   *<i>de UserRestController</i>
+   *<h1></h1>
+   *<hr>
+   *<p>Supprime un User</p>
+   * @param id
+   * @return
+   */
+  @DeleteMapping("/user/{id}")
+  public ResponseEntity<String> deleteUser(@PathVariable("id") int id) {
+    try {
+      userService.deleteUser(id);
+      return ResponseEntity.ok("User supprimé avec succès");
+    } catch (Exception e) {
+      return ExceptionManager.handleException(e);
+    }
+  }
 }

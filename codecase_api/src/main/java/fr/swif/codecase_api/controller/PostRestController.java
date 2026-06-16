@@ -70,7 +70,6 @@ public class PostRestController {
     try {
       return ResponseEntity.ok(postService.getPosts());
     } catch (Exception e) {
-      e.printStackTrace();
       return ExceptionManager.handleException(e);
     }
   }
@@ -88,12 +87,7 @@ public class PostRestController {
   @GetMapping("/post/{id}")
   public ResponseEntity<Post> getPost(@PathVariable("id") int id) {
     try {
-      Optional<Post> post = postService.getPost(id);
-      if(post.isPresent()) {
-        return ResponseEntity.ok(post.get());
-      } else {
-        return new ResponseEntity("Post non présent", HttpStatus.NOT_FOUND);
-      }
+      return ResponseEntity.ok(postService.getPost(id));
     } catch (Exception e) {
       return ExceptionManager.handleException(e);
     }

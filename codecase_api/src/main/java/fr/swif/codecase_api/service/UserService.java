@@ -1,7 +1,9 @@
 package fr.swif.codecase_api.service;
 
+import fr.swif.codecase_api.exception.CodeCaseException;
 import fr.swif.codecase_api.model.User;
 import fr.swif.codecase_api.repository.UserRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +37,7 @@ public class UserService {
   private final UserRepository userRepository;
 
   /**
-   * Méthode getUsers
+   * Méthode getUsers.
    *
    *<i>de UserService</i>
    *<h1></h1>
@@ -44,30 +46,38 @@ public class UserService {
    * @return Un Iterable composé de Users → c'est une interface qui
    * représente "quelque chose qu'on peut parcourir élément par élément"
    * Comme une arraylist mais peut parcourir n'importe quelle collection.
+   * @throws CodeCaseException
    */
   // Iterable → Interface qui peut être parcourue
-  public Iterable<User> getUsers() {
-    return userRepository.findAll();
+  public Iterable<User> getUsers() throws CodeCaseException {
+    Iterable<User> users = userRepository.findAll();
+    if(!users.iterator().hasNext()) {
+      // iterator() -> curseur positionné au début de la collection
+      // hasNext() -> retourne true s'il y a au moins 1 élément à partir
+      // de la position actuelle
+      throw new CodeCaseException("Aucuns users trouvés", HttpStatus.NOT_FOUND);
+    }
+    return users;
   }
 
   /**
-   * Méthode getUser
+   * Méthode getUser.
    *
    *<i>de UserService</i>
    *<h1></h1>
    *<hr>
    *<p>Prend un id et renvoie le User en question s'il existe grâce à findById()</p>
    * @param id l'id du User cherché
-   * @return Un Optional de User qui sert à gérer explicitement null au lieu
-   * d'avoir une erreur NullPointerException → "cette méthode peut ne rien retourner, gère-le".
+   * @return
+   * @throws CodeCaseException
    */
-  // Optional → Conteneur qui contient soit une valeur, soit rien
-  public Optional<User> getUser(int id) {
-    return userRepository.findById(id);
+  public User getUser(int id) throws CodeCaseException {
+    return userRepository.findById(id)
+        .orElseThrow(() -> new CodeCaseException("User introuvable : " + id, HttpStatus.NOT_FOUND));
   }
 
   /**
-   * Méthode saveUser
+   * Méthode saveUser.
    *
    *<i>de UserService</i>
    *<h1></h1>
@@ -83,45 +93,39 @@ public class UserService {
   }
 
   /**
-   * Méthode updateUser
+   * Méthode updateUser.
    *
    *<i>de UserService</i>
    *<h1></h1>
    *<hr>
    *<p>Prend l'id d'un User et met à jour les informations suivantes :
    * Email, Mot de passe, Avatar</p>
-   * @param id
+   * @param id L'id du User qui met à jour
+   * @param user L'objet User qui est mis à jour
    * @return
+   * @throws CodeCaseException
    */
   @Transactional
-  public User updateUser(int id) {
+  public User updateUser(int id, User user) throws CodeCaseException {
 
-    Optional<User> user = getUser(id);
+    User userActuel = getUser(id);
 
-    if(user.isPresent()) {
-
-      User userActuel = user.get();
-
-      String userEmail = userActuel.getUserEmail();
-      String userMdp = userActuel.getUserMdp();
-      String userAvatar = userActuel.getUserAvatar();
-
-      if(userEmail != null) {
-        userActuel.setUserEmail(userEmail);
+      if(user.getUserEmail() != null) {
+        user.setUserEmail(user.getUserEmail());
       }
 
-      if(userMdp != null) {
-        userActuel.setUserMdp(userMdp);
+      if(user.getUserMdp() != null) {
+        user.setUserMdp(user.getUserMdp());
       }
 
-      if(userAvatar != null) {
-        userActuel.setUserAvatar(userAvatar);
+      if(user.getUserAvatar() != null) {
+        user.setUserAvatar(user.getUserAvatar());
       }
-    }
+    return userActuel;
   }
 
   /**
-   * Méthode deleteUser
+   * Méthode deleteUser.
    *
    *<i>de UserService</i>
    *<h1></h1>
@@ -136,7 +140,7 @@ public class UserService {
   }
 
   /**
-   * Méthode anonymisationUser
+   * Méthode anonymisationUser.
    *
    *<i>de UserService</i>
    *<h1></h1>
@@ -147,32 +151,22 @@ public class UserService {
    */
   // @Transactional surcharge le readOnly de la classe
   @Transactional
-  public void anonymisationUser(int id) {
+  public void anonymisationUser(int id) throws CodeCaseException {
 
-    Optional<User> user = getUser(id);
+    User userExistant = getUser(id);
 
-    if(user.isPresent()) {
+    if(userExistant.getUserPseudo() != null) {
+      userExistant.setUserPseudo("Utilisateur supprimé-" + id);
+    }
 
-      User userExistant = user.get();
+    // Permet de remplacer le hash du mot de passe valide en
+    // un hash invalide et inutilisable
+    if(userExistant.getUserMdp() != null) {
+      userExistant.setUserMdp("{erased}");
+    }
 
-      String userPseudo = userExistant.getUserPseudo();
-      String userMdp = userExistant.getUserMdp();
-      String userEmail = userExistant.getUserEmail();
-
-      if(userPseudo != null) {
-        userExistant.setUserPseudo("Utilisateur supprimé-" + id);
-      }
-
-      // Permet de remplacer le hash du mot de passe valide en
-      // un hash invalide et inutilisable
-      if(userMdp != null) {
-        userExistant.setUserMdp("{erased}");
-      }
-
-      if(userEmail != null) {
-        userExistant.setUserEmail("deleted-" + id + "@anonymized.invalid");
-      }
+    if(userExistant.getUserEmail() != null) {
+      userExistant.setUserEmail("deleted-" + id + "@anonymized.invalid");
     }
   }
-
 }
