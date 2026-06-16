@@ -71,7 +71,6 @@ public class User {
   /**
    * Variable userRole
    */
-  @Max(8)
   @NotEmpty
   @Enumerated(EnumType.STRING) // Permet de stocker
                               // "VISITEUR"/"USER"/"MODO"/"ADMIN" au lieu de 0/1
