@@ -80,14 +80,14 @@ public class User {
   /**
    * Variable userDateCreationCompte
    */
-  @NotEmpty
+  @NotNull
   @Column(name = "userDateCreationCompte")
   private LocalDate userDateCreationCompte;
 
   /**
    * Variable userDerniereConnexion
    */
-  @NotEmpty
+  @NotNull
   @Column(name = "userDerniereConnexion")
   private LocalDateTime userDerniereConnexion;
 
