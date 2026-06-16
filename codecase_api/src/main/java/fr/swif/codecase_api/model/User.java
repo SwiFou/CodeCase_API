@@ -14,6 +14,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -88,7 +89,7 @@ public class User {
    */
   @NotEmpty
   @Column(name = "userDerniereConnexion")
-  private LocalDate userDerniereConnexion;
+  private LocalDateTime userDerniereConnexion;
 
   /**
    * Variable userAvatar
