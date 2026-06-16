@@ -111,17 +111,17 @@ public class UserService {
     User userActuel = getUser(id);
 
       if(user.getUserEmail() != null) {
-        user.setUserEmail(user.getUserEmail());
+        userActuel.setUserEmail(user.getUserEmail());
       }
 
       if(user.getUserMdp() != null) {
-        user.setUserMdp(user.getUserMdp());
+        userActuel.setUserMdp(user.getUserMdp());
       }
 
       if(user.getUserAvatar() != null) {
-        user.setUserAvatar(user.getUserAvatar());
+        userActuel.setUserAvatar(user.getUserAvatar());
       }
-    return userActuel;
+    return userRepository.save(userActuel);
   }
 
   /**
