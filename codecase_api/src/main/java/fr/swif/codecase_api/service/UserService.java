@@ -168,5 +168,6 @@ public class UserService {
     if(userExistant.getUserEmail() != null) {
       userExistant.setUserEmail("deleted-" + id + "@anonymized.invalid");
     }
+    userRepository.save(userExistant);
   }
 }

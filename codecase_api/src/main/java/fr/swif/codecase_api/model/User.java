@@ -49,7 +49,7 @@ public class User {
    * Variable userPseudo
    */
   @PersonalData(usage = "personalisation", categorie = "contact")
-  @Size(min = 3, max = 20)
+  @Size(min = 3, max = 30)
   @Column(name = "userPseudo")
   private String userPseudo;
 
