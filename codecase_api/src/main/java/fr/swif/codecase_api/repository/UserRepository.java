@@ -1,6 +1,8 @@
 package fr.swif.codecase_api.repository;
 
 import fr.swif.codecase_api.model.User;
+import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -19,6 +21,6 @@ import org.springframework.stereotype.Repository;
 // @Repository est un stéréotype Spring qui marque une classe
 // comme couche d'accès aux données (DAO)
 @Repository
-public interface UserRepository extends CrudRepository<User, Integer> {
-
+public interface UserRepository extends JpaRepository<User, Integer> {
+  Optional<User> findByUserEmail(String userEmail);
 }
