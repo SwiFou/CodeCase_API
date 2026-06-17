@@ -66,15 +66,18 @@ public class PostService {
    *<i>de PostService</i>
    *<h1></h1>
    *<hr>
-   *<p>Prend un id et renvoie le Post en question s'il existe grâce à findById()</p>
+   *<p>Prend un id et renvoie le Post en question
+   * s'il existe grâce à findById()</p>
    * @param id l'id du Post cherché
    * @return Un Optional de Post qui sert à gérer explicitement null au lieu
-   * d'avoir une erreur NullPointerException → "cette méthode peut ne rien retourner, gère-le".
+   * d'avoir une erreur NullPointerException
+   * → "cette méthode peut ne rien retourner, gère-le".
    * @throws CodeCaseException
    */
   public Post getPost(int id) throws CodeCaseException{
     return postRepository.findById(id)
-        .orElseThrow(() -> new CodeCaseException("Post introuvable : " + id, HttpStatus.NOT_FOUND));
+        .orElseThrow(() -> new CodeCaseException("Post introuvable : "
+            + id, HttpStatus.NOT_FOUND));
   }
 
   /**
@@ -82,7 +85,8 @@ public class PostService {
    *
    *<i>de PostService</i>
    *<hr>
-   *<p>Prend un Objet Post et le sauvegarde ou le mets à jour dans la BDD grâce à save()</p>
+   *<p>Prend un Objet Post et le sauvegarde ou
+   * le mets à jour dans la BDD grâce à save()</p>
    * @param post le Post à créer ou modifier
    * @return Le Post créé ou modifié
    */

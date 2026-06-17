@@ -27,12 +27,15 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 // @RestController est une combinaison de :
-// - @Controller qui marque la classe comme composant Spring MVC gérant les requêtes HTTP
+// - @Controller qui marque la classe comme composant Spring MVC
+// gérant les requêtes HTTP
 // - @ResponseBody qui indique que la valeur retournée par chaque méthode
 // est sérialisée directement dans le corps de la réponse HTPP
-// (JSON par défaut avec Jackson), au lieu d'être interprétée comme un nom de vue Thymeleaf/JSP
+// (JSON par défaut avec Jackson), au lieu d'être interprétée comme un
+// nom de vue Thymeleaf/JSP
 @RestController
-// @RequiredArgsConstructor génère automatiquement un constructeur prenant en paramètre tous les champs final et @NotNull de la classe
+// @RequiredArgsConstructor génère automatiquement un constructeur prenant
+// en paramètre tous les champs final et @NotNull de la classe
 @RequiredArgsConstructor
 
 public class UserRestController {
@@ -108,7 +111,8 @@ public class UserRestController {
    * @return
    */
   @PutMapping("/user/{id}")
-  public ResponseEntity<User> updateUser(@PathVariable("id") int id, @RequestBody User user) {
+  public ResponseEntity<User> updateUser(@PathVariable("id") int id,
+      @RequestBody User user) {
     try {
       return ResponseEntity.ok(userService.updateUser(id, user));
     } catch (Exception e) {

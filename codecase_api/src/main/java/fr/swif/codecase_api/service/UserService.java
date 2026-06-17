@@ -66,14 +66,16 @@ public class UserService {
    *<i>de UserService</i>
    *<h1></h1>
    *<hr>
-   *<p>Prend un id et renvoie le User en question s'il existe grâce à findById()</p>
+   *<p>Prend un id et renvoie le User en question
+   * s'il existe grâce à findById()</p>
    * @param id l'id du User cherché
    * @return
    * @throws CodeCaseException
    */
   public User getUser(int id) throws CodeCaseException {
     return userRepository.findById(id)
-        .orElseThrow(() -> new CodeCaseException("User introuvable : " + id, HttpStatus.NOT_FOUND));
+        .orElseThrow(() -> new CodeCaseException("User introuvable : "
+            + id, HttpStatus.NOT_FOUND));
   }
 
   /**
@@ -82,7 +84,8 @@ public class UserService {
    *<i>de UserService</i>
    *<h1></h1>
    *<hr>
-   *<p>Prends un objet User et le sauvegarde ou le mets à jour dans la BDD grâce à save()</p>
+   *<p>Prends un objet User et le sauvegarde
+   * ou le mets à jour dans la BDD grâce à save()</p>
    * @param user le User à créer ou modifier
    * @return Le User créé ou modifié
    */

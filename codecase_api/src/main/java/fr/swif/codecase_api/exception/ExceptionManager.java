@@ -74,13 +74,17 @@ public class ExceptionManager {
             HttpStatus.BAD_REQUEST);
         break;
       case 1451:
-        retour = new ResponseEntity<>("L'élément est encore lié à des enfants", HttpStatus.INTERNAL_SERVER_ERROR);
+        retour = new ResponseEntity<>(
+            "L'élément est encore lié à des enfants",
+            HttpStatus.INTERNAL_SERVER_ERROR);
         break;
       case 1406:
-        retour = new ResponseEntity<>("Un champ est trop long", HttpStatus.BAD_REQUEST);
+        retour = new ResponseEntity<>("Un champ est trop long",
+            HttpStatus.BAD_REQUEST);
         break;
       default:
-        retour = new ResponseEntity<>("Exception inconnue", HttpStatus.INTERNAL_SERVER_ERROR);
+        retour = new ResponseEntity<>("Exception inconnue",
+            HttpStatus.INTERNAL_SERVER_ERROR);
         break;
     }
     return retour;
@@ -99,6 +103,7 @@ public class ExceptionManager {
    */
   private static ResponseEntity handleUnknown(Exception ex) {
 
-    return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    return new ResponseEntity<>(ex.getMessage(),
+        HttpStatus.INTERNAL_SERVER_ERROR);
   }
 }

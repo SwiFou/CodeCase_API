@@ -16,7 +16,8 @@ import org.springframework.stereotype.Repository;
  *@since 11/06/2026
  */
 
-// @Repository est un stéréotype Spring qui marque une classe comme couche d'accès aux données (DAO)
+// @Repository est un stéréotype Spring qui marque une classe
+// comme couche d'accès aux données (DAO)
 @Repository
 public interface PostRepository  extends CrudRepository<Post, Integer> {
 
