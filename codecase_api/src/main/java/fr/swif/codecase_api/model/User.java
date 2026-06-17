@@ -9,13 +9,16 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.PathVariable;
 
 /**
  * User
@@ -28,7 +31,11 @@ import org.springframework.format.annotation.DateTimeFormat;
  * @since 09/06/2026
  */
 
+// @Data est l'équivalent de @Getter @Setter @RequiredArgsConstructor
+// @ToString @EqualsAndHashCode
 @Data
+// @Entity indique à Hibernate (ou tout autre provider JPA) que la
+// classe Java est mappée à une table en base de données
 @Entity
 @Table(name = "User_")
 public class User {
@@ -43,19 +50,22 @@ public class User {
   /**
    * Variable userPseudo
    */
-  @Size(min = 3, max = 20)
+  @PersonalData(usage = "personalisation", categorie = "contact")
+  @Size(min = 3, max = 30)
   @Column(name = "userPseudo")
   private String userPseudo;
 
   /**
    * Variable userMdp
    */
+  @PersonalData(usage = "authentification", categorie = "contact")
   @Column(name = "userMdp")
   private String userMdp;
 
   /**
    * Variable userEmail
    */
+  @PersonalData(usage = "authentification", categorie = "contact")
   @Email
   @Column(name = "userEmail")
   private String userEmail;
@@ -63,8 +73,7 @@ public class User {
   /**
    * Variable userRole
    */
-  @Size(max = 8)
-  @NotEmpty
+  @NotNull
   @Enumerated(EnumType.STRING) // Permet de stocker
                               // "VISITEUR"/"USER"/"MODO"/"ADMIN" au lieu de 0/1
   @Column(name = "userRole")
@@ -73,16 +82,16 @@ public class User {
   /**
    * Variable userDateCreationCompte
    */
-  @NotEmpty
+  @NotNull
   @Column(name = "userDateCreationCompte")
   private LocalDate userDateCreationCompte;
 
   /**
    * Variable userDerniereConnexion
    */
-  @NotEmpty
+  @NotNull
   @Column(name = "userDerniereConnexion")
-  private LocalDate userDerniereConnexion;
+  private LocalDateTime userDerniereConnexion;
 
   /**
    * Variable userAvatar

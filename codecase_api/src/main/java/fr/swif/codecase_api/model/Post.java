@@ -11,6 +11,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import lombok.Data;
 
 /**
@@ -24,7 +25,11 @@ import lombok.Data;
  * @since 09/06/2026
  */
 
+// @Data est l'équivalent de @Getter @Setter @RequiredArgsConstructor
+// @ToString @EqualsAndHashCode
 @Data
+// @Entity indique à Hibernate (ou tout autre provider JPA) que la
+// classe Java est mappée à une table en base de données
 @Entity
 @Table(name = "Post")
 public class Post {
@@ -81,7 +86,7 @@ public class Post {
   /**
    * Variable creationDatePost
    */
-  @Column(name = "creationDatePost")
-  private LocalDate creationDatePost;
+  @Column(name = "postDateCreation")
+  private LocalDateTime postDateCreation;
 
 }

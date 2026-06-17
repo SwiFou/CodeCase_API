@@ -23,7 +23,11 @@ import lombok.Data;
  * @since 09/06/2026
  */
 
+// @Data est l'équivalent de @Getter @Setter @RequiredArgsConstructor
+// @ToString @EqualsAndHashCode
 @Data
+// @Entity indique à Hibernate (ou tout autre provider JPA) que la
+// classe Java est mappée à une table en base de données
 @Entity
 @Table(name = "Vote")
 public class Vote {
@@ -38,7 +42,8 @@ public class Vote {
   /**
    * Variable voteType de type VoteType
    */
-  @Enumerated(EnumType.STRING) // Permet de stocker "LIKE"/"DISLIKE" au lieu de 0/1
+  @Enumerated(EnumType.STRING) // Permet de stocker "LIKE"/"DISLIKE"
+                              // au lieu de 0/1
   @Column(name = "voteType")
   private VoteType voteType;
 
