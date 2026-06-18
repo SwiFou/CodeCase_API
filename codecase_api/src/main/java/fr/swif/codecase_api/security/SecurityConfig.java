@@ -18,7 +18,10 @@ import org.springframework.security.web.SecurityFilterChain;
  * @since 16/06/2026
  */
 
+// @Configutration indique qu'une classe déclare une ou plusieurs méthodes
+// annotées par @Bean
 @Configuration
+// @EnableWebSecuity
 @EnableWebSecurity
 public class SecurityConfig {
 

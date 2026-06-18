@@ -21,7 +21,10 @@ import org.springframework.security.core.userdetails.UserDetails;
  * @since 17/06/2026
  */
 
+// @Getter permet de générer les getters des différentes méthodes
 @Getter
+// @RequiredArgsConstructor génère automatiquement un constructeur prenant en
+// paramètre tous les champs final et @NotNull de la classe
 @RequiredArgsConstructor
 public class UserDetailsImpl implements UserDetails {
 
