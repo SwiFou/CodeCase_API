@@ -159,17 +159,20 @@ public class UserService {
     User userExistant = getUser(id);
 
     if(userExistant.getUserPseudo() != null) {
-      userExistant.setUserPseudo("Utilisateur supprimé-" + id);
+      userExistant.setUserPseudo("Utilisateur supprimé-");
     }
 
     // Permet de remplacer le hash du mot de passe valide en
     // un hash invalide et inutilisable
     if(userExistant.getUserMdp() != null) {
-      userExistant.setUserMdp("{erased}");
+      userExistant.setUserMdp("erased");
     }
 
+    // Le .invalid est destiné aux utilisations de constructions en ligne
+    // de noms de domaines dont il est sûr qu'ils sont invalides
+    // voir http://abcdrfc.free.fr/rfc-vf/rfc2606.html
     if(userExistant.getUserEmail() != null) {
-      userExistant.setUserEmail("deleted-" + id + "@anonymized.invalid");
+      userExistant.setUserEmail("deleted-@anonymized.invalid");
     }
     userRepository.save(userExistant);
   }

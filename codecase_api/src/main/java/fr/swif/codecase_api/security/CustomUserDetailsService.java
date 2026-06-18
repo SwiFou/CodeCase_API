@@ -22,13 +22,19 @@ import org.springframework.stereotype.Service;
  * @since 17/06/2026
  */
 
+// @Service sert à indiquer que la classe détient la logique métier du CRUD
 @Service
+// @RequiredArgsConstructor génère automatiquement un constructeur prenant en
+// paramètre tous les champs final et @NotNull de la classe
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
   private final UserRepository userRepository;
 
+  // @Override permet de redéfinir une méthode héritée
   @Override
+  // L'interface UserDetails représente le contrat que Spring Security utilise
+  // pour manipuler un utilisateur authentifié
   public UserDetails loadUserByUsername(String userEmail)
       throws UsernameNotFoundException {
 
