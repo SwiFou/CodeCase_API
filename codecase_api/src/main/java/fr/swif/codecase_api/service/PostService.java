@@ -5,7 +5,6 @@ import fr.swif.codecase_api.model.Post;
 import fr.swif.codecase_api.repository.PostRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +22,7 @@ import org.springframework.stereotype.Service;
 // @RequiredArgsConstructor génère automatiquement un constructeur prenant en
 // paramètre tous les champs final et @NotNull de la classe
 @RequiredArgsConstructor
-// @Service sert à indiquer que la classe détient la logique métier du CRUD
+// @Service sert à indiquer que la classe détient la logique métier
 @Service
 // @Transactional permet de garantir une transaction :
 // - Si tout se passe bien → COMMIT automatique à la fin
