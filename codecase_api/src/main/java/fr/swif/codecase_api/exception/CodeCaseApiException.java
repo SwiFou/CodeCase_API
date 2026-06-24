@@ -1,7 +1,6 @@
 package fr.swif.codecase_api.exception;
 
 import lombok.Getter;
-import org.springframework.http.HttpStatus;
 
 @Getter
 public class CodeCaseApiException extends Exception {
@@ -11,6 +10,6 @@ public class CodeCaseApiException extends Exception {
   public CodeCaseApiException(MessagesErreur messagesErreur) {
     super(messagesErreur.getDescription());
     this.messagesErreur = messagesErreur;
-  }  
+  }
 
 }
