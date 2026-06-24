@@ -27,9 +27,9 @@ import org.springframework.web.bind.annotation.RestController;
 // - @Controller qui marque la classe comme composant Spring MVC
 // gérant les requêtes HTTP
 // - @ResponseBody qui indique que la valeur retournée par chaque méthode
-// est sérialisée directement dans le corps de la réponse HTTP
-// (JSON par défaut avec Jackson), au lieu d'être interprétée comme un
-// nom de vue Thymeleaf/JSP
+// est sérialisée (conversion de l'objet en JSON) directement dans le corps
+// de la réponse HTTP (JSON par défaut avec Jackson), au lieu d'être interprétée
+// comme un nom de vue Thymeleaf/JSP
 @RestController
 // @RequiredArgsConstructor génère automatiquement un constructeur prenant
 // en paramètre tous les champs final et @NonNull de la classe
