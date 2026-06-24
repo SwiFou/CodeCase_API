@@ -11,6 +11,8 @@ package fr.swif.codecase_api.exception;
  * @version 0.0.1
  * @since 24/06/2026
  */
+
+// Source : https://josealopez.dev/en/blog/spring-boot-global-exception-handling
 public record MessageClientApiErreur(MessagesErreur code, String message) {
 
 }
