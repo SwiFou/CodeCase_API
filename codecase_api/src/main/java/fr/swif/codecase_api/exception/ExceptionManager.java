@@ -40,8 +40,8 @@ public class ExceptionManager {
    */
   public static ResponseEntity handleException(Exception ex) {
 
-    if (ex instanceof CodeCaseException) {
-      CodeCaseException cx = (CodeCaseException) ex;
+    if (ex instanceof CodeCaseApiException) {
+      CodeCaseApiException cx = (CodeCaseApiException) ex;
       return new ResponseEntity<>(cx.getMessage(), cx.getStatus());
     }
     else if (ex instanceof SQLException) {

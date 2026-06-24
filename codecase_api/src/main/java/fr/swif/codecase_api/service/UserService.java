@@ -1,6 +1,6 @@
 package fr.swif.codecase_api.service;
 
-import fr.swif.codecase_api.exception.CodeCaseException;
+import fr.swif.codecase_api.exception.CodeCaseApiException;
 import fr.swif.codecase_api.model.User;
 import fr.swif.codecase_api.repository.UserRepository;
 import org.springframework.http.HttpStatus;
@@ -45,16 +45,16 @@ public class UserService {
    * @return Un Iterable composé de Users → c'est une interface qui
    * représente "quelque chose qu'on peut parcourir élément par élément"
    * Comme une arraylist mais peut parcourir n'importe quelle collection.
-   * @throws CodeCaseException
+   * @throws CodeCaseApiException
    */
   // Iterable → Interface qui peut être parcourue
-  public Iterable<User> getUsers() throws CodeCaseException {
+  public Iterable<User> getUsers() throws CodeCaseApiException {
     Iterable<User> users = userRepository.findAll();
     if(!users.iterator().hasNext()) {
       // iterator() -> curseur positionné au début de la collection
       // hasNext() -> retourne true s'il y a au moins 1 élément à partir
       // de la position actuelle
-      throw new CodeCaseException("Aucuns users trouvés", HttpStatus.NOT_FOUND);
+      throw new CodeCaseApiException("Aucuns users trouvés", HttpStatus.NOT_FOUND);
     }
     return users;
   }
@@ -69,11 +69,11 @@ public class UserService {
    * s'il existe grâce à findById()</p>
    * @param id l'id du User cherché
    * @return
-   * @throws CodeCaseException
+   * @throws CodeCaseApiException
    */
-  public User getUser(int id) throws CodeCaseException {
+  public User getUser(int id) throws CodeCaseApiException {
     return userRepository.findById(id)
-        .orElseThrow(() -> new CodeCaseException("User introuvable : "
+        .orElseThrow(() -> new CodeCaseApiException("User introuvable : "
             + id, HttpStatus.NOT_FOUND));
   }
 
@@ -104,11 +104,11 @@ public class UserService {
    * Email, Mot de passe, Avatar</p>
    * @param id L'id du User qui met à jour
    * @param user L'objet User qui est mis à jour
-   * @return
-   * @throws CodeCaseException
+   * @return Le User modifié
+   * @throws CodeCaseApiException
    */
   @Transactional
-  public User updateUser(int id, User user) throws CodeCaseException {
+  public User updateUser(int id, User user) throws CodeCaseApiException {
 
     User userActuel = getUser(id);
 
@@ -153,7 +153,7 @@ public class UserService {
    */
   // @Transactional surcharge le readOnly de la classe
   @Transactional
-  public void anonymisationUser(int id) throws CodeCaseException {
+  public void anonymisationUser(int id) throws CodeCaseApiException {
 
     User userExistant = getUser(id);
 

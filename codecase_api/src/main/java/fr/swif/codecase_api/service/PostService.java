@@ -1,6 +1,6 @@
 package fr.swif.codecase_api.service;
 
-import fr.swif.codecase_api.exception.CodeCaseException;
+import fr.swif.codecase_api.exception.CodeCaseApiException;
 import fr.swif.codecase_api.model.Post;
 import fr.swif.codecase_api.repository.PostRepository;
 import org.springframework.http.HttpStatus;
@@ -45,16 +45,16 @@ public class PostService {
    * @return Un Iterable composé de Posts → c'est une interface qui
    * représente "quelque chose qu'on peut parcourir élément par élément"
    * Comme une Arraylist mais peut parcourir n'importe quelle collection.
-   * @throws CodeCaseException
+   * @throws CodeCaseApiException
    */
   // Iterable → Interface qui peut être parcourue
-  public Iterable<Post> getPosts() throws CodeCaseException {
+  public Iterable<Post> getPosts() throws CodeCaseApiException {
     Iterable<Post> posts = postRepository.findAll();
     if(!posts.iterator().hasNext()) {
       // iterator() -> curseur positionné au début de la collection
       // hasNext() -> retourne true s'il y a au moins 1 élément à partir
       // de la position actuelle
-      throw new CodeCaseException("Aucuns posts trouvés", HttpStatus.NOT_FOUND);
+      throw new CodeCaseApiException("Aucuns posts trouvés", HttpStatus.NOT_FOUND);
     }
     return posts;
   }
@@ -71,11 +71,11 @@ public class PostService {
    * @return Un Optional de Post qui sert à gérer explicitement null au lieu
    * d'avoir une erreur NullPointerException
    * → "cette méthode peut ne rien retourner, gère-le".
-   * @throws CodeCaseException
+   * @throws CodeCaseApiException
    */
-  public Post getPost(int id) throws CodeCaseException{
+  public Post getPost(int id) throws CodeCaseApiException {
     return postRepository.findById(id)
-        .orElseThrow(() -> new CodeCaseException("Post introuvable : "
+        .orElseThrow(() -> new CodeCaseApiException("Post introuvable : "
             + id, HttpStatus.NOT_FOUND));
   }
 

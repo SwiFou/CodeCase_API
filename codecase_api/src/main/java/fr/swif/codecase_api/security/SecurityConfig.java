@@ -1,6 +1,6 @@
 package fr.swif.codecase_api.security;
 
-import fr.swif.codecase_api.exception.CodeCaseException;
+import fr.swif.codecase_api.exception.CodeCaseApiException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -26,7 +26,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
   @Bean
-  public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws CodeCaseException {
+  public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws CodeCaseApiException {
     httpSecurity
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(auth -> auth
