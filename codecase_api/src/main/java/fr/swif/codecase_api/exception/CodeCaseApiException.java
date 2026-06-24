@@ -6,11 +6,11 @@ import org.springframework.http.HttpStatus;
 @Getter
 public class CodeCaseApiException extends Exception {
 
-  private final HttpStatus status;
+  private final MessagesErreur messagesErreur;
 
-  public CodeCaseApiException(String message, HttpStatus status) {
-    super(message);
-    this.status = status;
-  }
+  public CodeCaseApiException(MessagesErreur messagesErreur) {
+    super(messagesErreur.getDescription());
+    this.messagesErreur = messagesErreur;
+  }  
 
 }

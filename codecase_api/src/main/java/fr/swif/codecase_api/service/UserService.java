@@ -1,6 +1,7 @@
 package fr.swif.codecase_api.service;
 
 import fr.swif.codecase_api.exception.CodeCaseApiException;
+import fr.swif.codecase_api.exception.MessagesErreur;
 import fr.swif.codecase_api.model.User;
 import fr.swif.codecase_api.repository.UserRepository;
 import org.springframework.http.HttpStatus;
@@ -54,7 +55,7 @@ public class UserService {
       // iterator() -> curseur positionné au début de la collection
       // hasNext() -> retourne true s'il y a au moins 1 élément à partir
       // de la position actuelle
-      throw new CodeCaseApiException("Aucuns users trouvés", HttpStatus.NOT_FOUND);
+      throw new CodeCaseApiException(MessagesErreur.ALL_USERS_NOT_FOUND);
     }
     return users;
   }
@@ -73,8 +74,8 @@ public class UserService {
    */
   public User getUser(int id) throws CodeCaseApiException {
     return userRepository.findById(id)
-        .orElseThrow(() -> new CodeCaseApiException("User introuvable : "
-            + id, HttpStatus.NOT_FOUND));
+        .orElseThrow(() -> new CodeCaseApiException(
+            MessagesErreur.USER_NOT_FOUND));
   }
 
   /**

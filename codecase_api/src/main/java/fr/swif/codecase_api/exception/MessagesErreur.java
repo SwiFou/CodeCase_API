@@ -9,11 +9,13 @@ import org.springframework.http.HttpStatus;
 public enum MessagesErreur {
 
   // Pour User
-  USER_NOT_FOND(HttpStatus.NOT_FOUND, "L'utilisateur cherché est introuvable"),
+  ALL_USERS_NOT_FOUND(HttpStatus.NOT_FOUND, "Les utilisateurs cherchés sont introuvables"),
+  USER_NOT_FOUND(HttpStatus.NOT_FOUND, "L'utilisateur cherché est introuvable"),
   USER_ALREADY_EXISTS(HttpStatus.CONFLICT, "Cet utilisateur existe déjà"),
   USER_DISABLED(HttpStatus.FORBIDDEN, "Ce compte est désactivé"),
 
   // Pour Post
+  ALL_POSTS_NOT_FOUND(HttpStatus.NOT_FOUND, "Les posts cherchés sont introuvables"),
   POST_NOT_FOUND(HttpStatus.NOT_FOUND, "Le post cherché est introuvable"),
   POST_ALREADY_EXISTS(HttpStatus.CONFLICT, "Le post existe déjà"),
 

@@ -1,6 +1,7 @@
 package fr.swif.codecase_api.service;
 
 import fr.swif.codecase_api.exception.CodeCaseApiException;
+import fr.swif.codecase_api.exception.MessagesErreur;
 import fr.swif.codecase_api.model.Post;
 import fr.swif.codecase_api.repository.PostRepository;
 import org.springframework.http.HttpStatus;
@@ -54,7 +55,7 @@ public class PostService {
       // iterator() -> curseur positionné au début de la collection
       // hasNext() -> retourne true s'il y a au moins 1 élément à partir
       // de la position actuelle
-      throw new CodeCaseApiException("Aucuns posts trouvés", HttpStatus.NOT_FOUND);
+      throw new CodeCaseApiException(MessagesErreur.ALL_POSTS_NOT_FOUND);
     }
     return posts;
   }
@@ -75,8 +76,8 @@ public class PostService {
    */
   public Post getPost(int id) throws CodeCaseApiException {
     return postRepository.findById(id)
-        .orElseThrow(() -> new CodeCaseApiException("Post introuvable : "
-            + id, HttpStatus.NOT_FOUND));
+        .orElseThrow(() -> new CodeCaseApiException(
+            MessagesErreur.POST_NOT_FOUND));
   }
 
   /**
