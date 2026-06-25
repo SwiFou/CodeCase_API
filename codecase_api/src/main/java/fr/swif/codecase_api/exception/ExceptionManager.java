@@ -7,6 +7,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 /**
  * ExceptionManager
@@ -63,6 +64,36 @@ public class ExceptionManager {
     return ResponseEntity.status(status).body(body);
   }
 
-  
+  @ExceptionHandler(value = {NoResourceFoundException.class})
+  public ResponseEntity<MessageClientApiErreur> handleExceptions(NoResourceFoundException exception) {
+    final MessagesErreur messagesErreur = MessagesErreur.NOT_FOUND;
+    final HttpStatus status = messagesErreur.getHttpStatus();
 
+    final String message = String.format("Ressource introuvable : '%s' sur la "
+        + "route '%s'.", exception.getHttpMethod(), exception.getResourcePath());
+
+    final MessageClientApiErreur body = creationMessageClientApi(messagesErreur, message);
+
+    return ResponseEntity.status(status).body(body);
+  }
+
+
+  @ExceptionHandler(value = {Exception.class})
+  public ResponseEntity<MessageClientApiErreur> handleExceptions(Exception exception) {
+    final MessagesErreur messagesErreur = MessagesErreur.INTERNAL_SERVER_ERROR;
+    final HttpStatus status = messagesErreur.getHttpStatus();
+
+    final MessageClientApiErreur body = creationMessageClientApi(messagesErreur);
+
+    return ResponseEntity.status(status).body(body);
+  }
+
+  public MessageClientApiErreur creationMessageClientApi(MessagesErreur messagesErreur, String message) {
+    return new MessageClientApiErreur(messagesErreur, message);
+  }
+
+  public MessageClientApiErreur creationMessageClientApi(MessagesErreur messagesErreur) {
+    final String message = messagesErreur.getDescription();
+    return new MessageClientApiErreur(messagesErreur, message);
+  }
 }

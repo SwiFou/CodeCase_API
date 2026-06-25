@@ -31,6 +31,7 @@ public enum MessagesErreur {
   // Messages génériques
   INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Une erreur inconnue est survenue"),
   BAD_REQUEST(HttpStatus.BAD_REQUEST, "Cette requête est invalide"),
+  NOT_FOUND(HttpStatus.NOT_FOUND, "La page demandée est introuvable"),
   UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "Authentification requise"),
   FORBIDDEN(HttpStatus.FORBIDDEN, "Accès refusé");
 
