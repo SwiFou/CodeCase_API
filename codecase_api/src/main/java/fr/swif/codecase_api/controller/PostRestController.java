@@ -1,5 +1,6 @@
 package fr.swif.codecase_api.controller;
 
+import fr.swif.codecase_api.exception.CodeCaseApiException;
 import fr.swif.codecase_api.exception.ExceptionManager;
 import fr.swif.codecase_api.model.Post;
 import fr.swif.codecase_api.service.PostService;
@@ -44,17 +45,14 @@ public class PostRestController {
    *<i>de UserRestController</i>
    *<h1></h1>
    *<hr>
-   *<p>Création d'un post</p>
+   *<p>Création d'un post
+   * Cette méthode ne lève que des unchecked exceptions</p>
    * @param post
    * @return
    */
   @PostMapping("/post")
   public ResponseEntity<Post> createPost(@RequestBody Post post) {
-    try {
       return ResponseEntity.ok(postService.savePost(post));
-    } catch (Exception e) {
-      return ExceptionManager.handleException(e);
-    }
   }
 
   /**
@@ -67,12 +65,8 @@ public class PostRestController {
    * @return
    */
   @GetMapping("/posts")
-  public ResponseEntity<Iterable<Post>> getPosts() {
-    try {
+  public ResponseEntity<Iterable<Post>> getPosts() throws CodeCaseApiException {
       return ResponseEntity.ok(postService.getPosts());
-    } catch (Exception e) {
-      return ExceptionManager.handleException(e);
-    }
   }
 
   /**
@@ -86,12 +80,9 @@ public class PostRestController {
    * @return
    */
   @GetMapping("/post/{id}")
-  public ResponseEntity<Post> getPost(@PathVariable("id") int id) {
-    try {
+  public ResponseEntity<Post> getPost(@PathVariable("id") int id)
+      throws CodeCaseApiException {
       return ResponseEntity.ok(postService.getPost(id));
-    } catch (Exception e) {
-      return ExceptionManager.handleException(e);
-    }
   }
 
   /**
@@ -100,17 +91,14 @@ public class PostRestController {
    *<i>de UserRestController</i>
    *<h1></h1>
    *<hr>
-   *<p>Supprime un post par rapport à son id</p>
+   *<p>Supprime un post par rapport à son id
+   * Cette méthode ne lève que des unchecked exceptions</p>
    * @param id
    * @return
    */
   @DeleteMapping("/post/{id}")
   public ResponseEntity<String> deletePost(@PathVariable("id") int id) {
-    try {
       postService.deletePost(id);
       return ResponseEntity.ok("Post supprimé");
-    } catch (Exception e) {
-      return ExceptionManager.handleException(e);
-    }
   }
 }

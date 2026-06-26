@@ -86,7 +86,8 @@ public class PostService {
    *<i>de PostService</i>
    *<hr>
    *<p>Prend un Objet Post et le sauvegarde ou
-   * le mets à jour dans la BDD grâce à save()</p>
+   * le mets à jour dans la BDD grâce à save()
+   * Cette méthode ne lève que des unchecked exceptions</p>
    * @param post le Post à créer ou modifier
    * @return Le Post créé ou modifié
    */
@@ -101,7 +102,8 @@ public class PostService {
    *
    *<i>de PostService</i>
    *<hr>
-   *<p>Prend l'id d'un Post et le supprime grâce à deleteById()</p>
+   *<p>Prend l'id d'un Post et le supprime grâce à deleteById()
+   * Cette méthode ne lève que des unchecked exceptions</p>
    * @param id L'id du Post à supprimer
    */
   // @Transactional surcharge le readOnly de la classe

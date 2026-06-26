@@ -85,7 +85,8 @@ public class UserService {
    *<h1></h1>
    *<hr>
    *<p>Prends un objet User et le sauvegarde
-   * ou le mets à jour dans la BDD grâce à save()</p>
+   * ou le mets à jour dans la BDD grâce à save()
+   * Cette méthode ne lève que des unchecked exceptions</p>
    * @param user le User à créer ou modifier
    * @return Le User créé ou modifié
    */
@@ -133,7 +134,8 @@ public class UserService {
    *<i>de UserService</i>
    *<h1></h1>
    *<hr>
-   *<p>Prend l'id d'un User et le supprime grâce à deleteById()</p>
+   *<p>Prend l'id d'un User et le supprime grâce à deleteById()
+   * Cette méthode ne lève que des unchecked exceptions</p>
    * @param id L'id du User à supprimer
    */
   // @Transactional surcharge le readOnly de la classe
