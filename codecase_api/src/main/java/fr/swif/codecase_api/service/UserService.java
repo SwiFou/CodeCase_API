@@ -4,7 +4,6 @@ import fr.swif.codecase_api.exception.CodeCaseApiException;
 import fr.swif.codecase_api.exception.MessagesErreur;
 import fr.swif.codecase_api.model.User;
 import fr.swif.codecase_api.repository.UserRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
