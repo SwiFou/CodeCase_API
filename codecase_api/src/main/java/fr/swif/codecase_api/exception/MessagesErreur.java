@@ -13,6 +13,9 @@ public enum MessagesErreur {
   USER_NOT_FOUND(HttpStatus.NOT_FOUND, "L'utilisateur cherché est introuvable"),
   USER_ALREADY_EXISTS(HttpStatus.CONFLICT, "Cet utilisateur existe déjà"),
   USER_DISABLED(HttpStatus.FORBIDDEN, "Ce compte est désactivé"),
+  USER_ALREADY_ANONYMISED(HttpStatus.CONFLICT, "Ce compte est déjà anonymisé"),
+  EMAIL_USER_ALREADY_EXIST(HttpStatus.CONFLICT, "Cette adresse mail est déjà enregistrée"),
+  AVATAR_USER_ALREADY_EXIST(HttpStatus.CONFLICT, "Cette photo de profil est déjà enregistrée"),
 
   // Pour Post
   ALL_POSTS_NOT_FOUND(HttpStatus.NOT_FOUND, "Les posts cherchés sont introuvables"),

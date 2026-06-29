@@ -108,7 +108,10 @@ public class PostService {
    */
   // @Transactional surcharge le readOnly de la classe
   @Transactional
-  public void deletePost(int id) {
+  public void deletePost(int id) throws CodeCaseApiException{
+    if (!postRepository.existsById(id)) {
+      throw new CodeCaseApiException(MessagesErreur.POST_NOT_FOUND);
+    }
     postRepository.deleteById(id);
   }
 }

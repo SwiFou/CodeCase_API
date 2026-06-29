@@ -97,7 +97,8 @@ public class PostRestController {
    * @return
    */
   @DeleteMapping("/post/{id}")
-  public ResponseEntity<String> deletePost(@PathVariable("id") int id) {
+  public ResponseEntity<String> deletePost(@PathVariable("id") int id)
+      throws CodeCaseApiException{
       postService.deletePost(id);
       return ResponseEntity.ok("Post supprimé");
   }

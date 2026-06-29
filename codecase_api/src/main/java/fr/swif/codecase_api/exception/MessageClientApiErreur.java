@@ -15,6 +15,6 @@ package fr.swif.codecase_api.exception;
 // Source : https://josealopez.dev/en/blog/spring-boot-global-exception-handling
 // record → raccourci pour créer des classes permettant de
 // transporter des données
-public record MessageClientApiErreur(MessagesErreur code, String message) {
+public record MessageClientApiErreur(MessagesErreur erreur, String message) {
 
 }

@@ -92,7 +92,10 @@ public class UserService {
    */
   // @Transactional surcharge le readOnly de la classe
   @Transactional
-  public User saveUser(User user) {
+  public User saveUser(User user) throws CodeCaseApiException{
+    if(userRepository.findByUserEmail(user.getUserEmail()).isPresent()) {
+      throw new CodeCaseApiException(MessagesErreur.USER_ALREADY_EXISTS);
+    }
     return userRepository.save(user);
   }
 
@@ -114,7 +117,8 @@ public class UserService {
 
     User userActuel = getUser(id);
 
-      if(user.getUserEmail() != null) {
+      if(user.getUserEmail() != null &&
+          !user.getUserEmail().equals(userActuel.getUserEmail())) {
         userActuel.setUserEmail(user.getUserEmail());
       }
 
@@ -122,7 +126,8 @@ public class UserService {
         userActuel.setUserMdp(user.getUserMdp());
       }
 
-      if(user.getUserAvatar() != null) {
+      if(user.getUserAvatar() != null &&
+      !user.getUserAvatar().equals(userActuel.getUserAvatar())) {
         userActuel.setUserAvatar(user.getUserAvatar());
       }
     return userRepository.save(userActuel);
@@ -140,7 +145,10 @@ public class UserService {
    */
   // @Transactional surcharge le readOnly de la classe
   @Transactional
-  public void deleteUser(int id) {
+  public void deleteUser(int id) throws CodeCaseApiException{
+    if (!userRepository.existsById(id)) {
+      throw new CodeCaseApiException(MessagesErreur.USER_NOT_FOUND);
+    }
     userRepository.deleteById(id);
   }
 
@@ -160,8 +168,12 @@ public class UserService {
 
     User userExistant = getUser(id);
 
+    if (userExistant.getUserEmail().endsWith("@anonymized.invalid")) {
+      throw new CodeCaseApiException(MessagesErreur.USER_ALREADY_ANONYMISED);
+    }
+
     if(userExistant.getUserPseudo() != null) {
-      userExistant.setUserPseudo("Utilisateur supprimé-");
+      userExistant.setUserPseudo("Utilisateur supprimé-" + id);
     }
 
     // Permet de remplacer le hash du mot de passe valide en
@@ -174,7 +186,7 @@ public class UserService {
     // de noms de domaines dont il est sûr qu'ils sont invalides
     // voir http://abcdrfc.free.fr/rfc-vf/rfc2606.html
     if(userExistant.getUserEmail() != null) {
-      userExistant.setUserEmail("deleted-@anonymized.invalid");
+      userExistant.setUserEmail("deleted" + id + "-@anonymized.invalid");
     }
     userRepository.save(userExistant);
   }

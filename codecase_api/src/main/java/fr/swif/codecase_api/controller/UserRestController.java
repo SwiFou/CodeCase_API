@@ -53,7 +53,8 @@ public class UserRestController {
    * @return
    */
   @PostMapping("/user")
-  public ResponseEntity<User> createUser(@RequestBody User user) {
+  public ResponseEntity<User> createUser(@RequestBody User user)
+      throws CodeCaseApiException {
       return ResponseEntity.ok(userService.saveUser(user));
   }
 
@@ -116,7 +117,7 @@ public class UserRestController {
    */
   @PutMapping("/user_anonym/{id}")
   public ResponseEntity<String> anonymisationUser(@PathVariable("id") int id)
-      throws CodeCaseApiException{
+      throws CodeCaseApiException {
       userService.anonymisationUser(id);
       return ResponseEntity.ok("Utilisateur anonymisé avec succès");
   }
@@ -133,7 +134,8 @@ public class UserRestController {
    * @return
    */
   @DeleteMapping("/user/{id}")
-  public ResponseEntity<String> deleteUser(@PathVariable("id") int id) {
+  public ResponseEntity<String> deleteUser(@PathVariable("id") int id)
+      throws CodeCaseApiException{
       userService.deleteUser(id);
       return ResponseEntity.ok("User supprimé avec succès");
   }
