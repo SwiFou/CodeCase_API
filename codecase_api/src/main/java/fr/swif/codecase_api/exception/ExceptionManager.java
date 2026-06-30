@@ -14,7 +14,7 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
  * <i>de fr.swif.codecase_api.exception</i>
  * <hr>
  * <p>Gestionnaire des Exceptions, dédié à rassembler la gestion des exceptions
- * majeures et centralisables</p>
+ * majeures et centralisables côté API</p>
  *
  * @author Calderoli Alexandre
  * @version 0.0.1
@@ -45,7 +45,7 @@ public class ExceptionManager {
   // @ExceptionHandler permet de définir la logique pour traiter et répondre aux
   // exceptions traitées en paramètre
   @ExceptionHandler(CodeCaseApiException.class)
-  public ResponseEntity<MessageClientApiErreur> handleCodeCaseException(
+  public ResponseEntity<MessageClientApiErreur> handleCodeCaseApiException(
       CodeCaseApiException codeCaseApiException) {
     final MessagesErreur messagesErreur =
         codeCaseApiException.getMessagesErreur();
