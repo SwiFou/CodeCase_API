@@ -4,6 +4,7 @@ import fr.swif.codecase_api.exception.CodeCaseApiException;
 import fr.swif.codecase_api.exception.ExceptionManager;
 import fr.swif.codecase_api.model.Post;
 import fr.swif.codecase_api.service.PostService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -51,7 +52,10 @@ public class PostRestController {
    * @return
    */
   @PostMapping("/post")
-  public ResponseEntity<Post> createPost(@RequestBody Post post) {
+  // ResponseEntity est une classe Spring qui représente toute la réponse HTTP
+  // que le controller va renvoyer
+  // @Valid permet de déclencher la Bean Validation sur l'objet qu'il annote
+  public ResponseEntity<Post> createPost(@Valid @RequestBody Post post) {
       return ResponseEntity.ok(postService.savePost(post));
   }
 
@@ -65,6 +69,8 @@ public class PostRestController {
    * @return
    */
   @GetMapping("/posts")
+  // ResponseEntity est une classe Spring qui représente toute la réponse HTTP
+  // que le controller va renvoyer
   public ResponseEntity<Iterable<Post>> getPosts() throws CodeCaseApiException {
       return ResponseEntity.ok(postService.getPosts());
   }
@@ -80,6 +86,8 @@ public class PostRestController {
    * @return
    */
   @GetMapping("/post/{id}")
+  // ResponseEntity est une classe Spring qui représente toute la réponse HTTP
+  // que le controller va renvoyer
   public ResponseEntity<Post> getPost(@PathVariable("id") int id)
       throws CodeCaseApiException {
       return ResponseEntity.ok(postService.getPost(id));
@@ -97,6 +105,8 @@ public class PostRestController {
    * @return
    */
   @DeleteMapping("/post/{id}")
+  // ResponseEntity est une classe Spring qui représente toute la réponse HTTP
+  // que le controller va renvoyer
   public ResponseEntity<String> deletePost(@PathVariable("id") int id)
       throws CodeCaseApiException{
       postService.deletePost(id);
