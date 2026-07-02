@@ -1,11 +1,11 @@
 package fr.swif.codecase_api.service;
 
-import fr.swif.codecase_api.exception.CodeCaseException;
+import fr.swif.codecase_api.exception.CodeCaseApiException;
+import fr.swif.codecase_api.exception.MessagesErreur;
 import fr.swif.codecase_api.model.Post;
 import fr.swif.codecase_api.repository.PostRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
 // @RequiredArgsConstructor génère automatiquement un constructeur prenant en
 // paramètre tous les champs final et @NotNull de la classe
 @RequiredArgsConstructor
-// @Service sert à indiquer que la classe détient la logique métier du CRUD
+// @Service sert à indiquer que la classe détient la logique métier
 @Service
 // @Transactional permet de garantir une transaction :
 // - Si tout se passe bien → COMMIT automatique à la fin
@@ -46,16 +46,16 @@ public class PostService {
    * @return Un Iterable composé de Posts → c'est une interface qui
    * représente "quelque chose qu'on peut parcourir élément par élément"
    * Comme une Arraylist mais peut parcourir n'importe quelle collection.
-   * @throws CodeCaseException
+   * @throws CodeCaseApiException
    */
   // Iterable → Interface qui peut être parcourue
-  public Iterable<Post> getPosts() throws CodeCaseException {
+  public Iterable<Post> getPosts() throws CodeCaseApiException {
     Iterable<Post> posts = postRepository.findAll();
     if(!posts.iterator().hasNext()) {
       // iterator() -> curseur positionné au début de la collection
       // hasNext() -> retourne true s'il y a au moins 1 élément à partir
       // de la position actuelle
-      throw new CodeCaseException("Aucuns posts trouvés", HttpStatus.NOT_FOUND);
+      throw new CodeCaseApiException(MessagesErreur.ALL_POSTS_NOT_FOUND);
     }
     return posts;
   }
@@ -72,12 +72,12 @@ public class PostService {
    * @return Un Optional de Post qui sert à gérer explicitement null au lieu
    * d'avoir une erreur NullPointerException
    * → "cette méthode peut ne rien retourner, gère-le".
-   * @throws CodeCaseException
+   * @throws CodeCaseApiException
    */
-  public Post getPost(int id) throws CodeCaseException{
+  public Post getPost(int id) throws CodeCaseApiException {
     return postRepository.findById(id)
-        .orElseThrow(() -> new CodeCaseException("Post introuvable : "
-            + id, HttpStatus.NOT_FOUND));
+        .orElseThrow(() -> new CodeCaseApiException(
+            MessagesErreur.POST_NOT_FOUND));
   }
 
   /**
@@ -86,7 +86,8 @@ public class PostService {
    *<i>de PostService</i>
    *<hr>
    *<p>Prend un Objet Post et le sauvegarde ou
-   * le mets à jour dans la BDD grâce à save()</p>
+   * le mets à jour dans la BDD grâce à save()
+   * Cette méthode ne lève que des unchecked exceptions</p>
    * @param post le Post à créer ou modifier
    * @return Le Post créé ou modifié
    */
@@ -101,12 +102,16 @@ public class PostService {
    *
    *<i>de PostService</i>
    *<hr>
-   *<p>Prend l'id d'un Post et le supprime grâce à deleteById()</p>
+   *<p>Prend l'id d'un Post et le supprime grâce à deleteById()
+   * Cette méthode ne lève que des unchecked exceptions</p>
    * @param id L'id du Post à supprimer
    */
   // @Transactional surcharge le readOnly de la classe
   @Transactional
-  public void deletePost(int id) {
+  public void deletePost(int id) throws CodeCaseApiException{
+    if (!postRepository.existsById(id)) {
+      throw new CodeCaseApiException(MessagesErreur.POST_NOT_FOUND);
+    }
     postRepository.deleteById(id);
   }
 }

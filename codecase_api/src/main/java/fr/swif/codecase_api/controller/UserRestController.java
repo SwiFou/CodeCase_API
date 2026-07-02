@@ -1,11 +1,10 @@
 package fr.swif.codecase_api.controller;
 
-import fr.swif.codecase_api.exception.ExceptionManager;
+import fr.swif.codecase_api.exception.CodeCaseApiException;
 import fr.swif.codecase_api.model.User;
 import fr.swif.codecase_api.service.UserService;
-import java.util.Optional;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,9 +29,9 @@ import org.springframework.web.bind.annotation.RestController;
 // - @Controller qui marque la classe comme composant Spring MVC
 // gérant les requêtes HTTP
 // - @ResponseBody qui indique que la valeur retournée par chaque méthode
-// est sérialisée directement dans le corps de la réponse HTPP
-// (JSON par défaut avec Jackson), au lieu d'être interprétée comme un
-// nom de vue Thymeleaf/JSP
+// est sérialisée (conversion de l'objet en JSON) directement dans le corps
+// de la réponse HTTP (JSON par défaut avec Jackson), au lieu d'être interprétée
+// comme un nom de vue Thymeleaf/JSP
 @RestController
 // @RequiredArgsConstructor génère automatiquement un constructeur prenant
 // en paramètre tous les champs final et @NotNull de la classe
@@ -48,17 +47,18 @@ public class UserRestController {
    *<i>de UserRestController</i>
    *<h1></h1>
    *<hr>
-   *<p>Création d'un User</p>
+   *<p>Création d'un User
+   * Cette méthode ne lève que des unchecked exceptions</p>
    * @param user
    * @return
    */
   @PostMapping("/user")
-  public ResponseEntity<User> createUser(@RequestBody User user) {
-    try {
+  // ResponseEntity est une classe Spring qui représente toute la réponse HTTP
+  // que le controller va renvoyer
+  // @Valid permet de déclencher la Bean Validation sur l'objet qu'il annote
+  public ResponseEntity<User> createUser(@Valid @RequestBody User user)
+      throws CodeCaseApiException {
       return ResponseEntity.ok(userService.saveUser(user));
-    } catch (Exception e) {
-      return ExceptionManager.handleException(e);
-    }
   }
 
   /**
@@ -71,13 +71,10 @@ public class UserRestController {
    * @return
    */
   @GetMapping("/users")
-  public ResponseEntity<Iterable<User>> getUsers() {
-    try {
+  // ResponseEntity est une classe Spring qui représente toute la réponse HTTP
+  // que le controller va renvoyer
+  public ResponseEntity<Iterable<User>> getUsers() throws CodeCaseApiException{
       return ResponseEntity.ok(userService.getUsers());
-    } catch (Exception e) {
-      e.printStackTrace();
-      return ExceptionManager.handleException(e);
-    }
   }
 
   /**
@@ -91,12 +88,11 @@ public class UserRestController {
    * @return
    */
   @GetMapping("/user/{id}")
-  public ResponseEntity<User> getUser(@PathVariable("id") int id) {
-    try {
+  // ResponseEntity est une classe Spring qui représente toute la réponse HTTP
+  // que le controller va renvoyer
+  public ResponseEntity<User> getUser(@PathVariable("id") int id)
+      throws CodeCaseApiException{
       return ResponseEntity.ok(userService.getUser(id));
-    } catch (Exception e) {
-      return ExceptionManager.handleException(e);
-    }
   }
 
   /**
@@ -111,13 +107,12 @@ public class UserRestController {
    * @return
    */
   @PutMapping("/user/{id}")
+  // ResponseEntity est une classe Spring qui représente toute la réponse HTTP
+  // que le controller va renvoyer
+  // @Valid permet de déclencher la Bean Validation sur l'objet qu'il annote
   public ResponseEntity<User> updateUser(@PathVariable("id") int id,
-      @RequestBody User user) {
-    try {
+      @Valid @RequestBody User user) throws CodeCaseApiException{
       return ResponseEntity.ok(userService.updateUser(id, user));
-    } catch (Exception e) {
-      return ExceptionManager.handleException(e);
-    }
   }
 
   /**
@@ -131,13 +126,12 @@ public class UserRestController {
    * @return
    */
   @PutMapping("/user_anonym/{id}")
-  public ResponseEntity<String> anonymisationUser(@PathVariable("id") int id) {
-    try {
+  // ResponseEntity est une classe Spring qui représente toute la réponse HTTP
+  // que le controller va renvoyer
+  public ResponseEntity<String> anonymisationUser(@PathVariable("id") int id)
+      throws CodeCaseApiException {
       userService.anonymisationUser(id);
       return ResponseEntity.ok("Utilisateur anonymisé avec succès");
-    } catch (Exception e) {
-      return ExceptionManager.handleException(e);
-    }
   }
 
   /**
@@ -146,17 +140,17 @@ public class UserRestController {
    *<i>de UserRestController</i>
    *<h1></h1>
    *<hr>
-   *<p>Supprime un User</p>
+   *<p>Supprime un User
+   * Cette méthode ne lève que des unchecked exceptions</p>
    * @param id
    * @return
    */
   @DeleteMapping("/user/{id}")
-  public ResponseEntity<String> deleteUser(@PathVariable("id") int id) {
-    try {
+  // ResponseEntity est une classe Spring qui représente toute la réponse HTTP
+  // que le controller va renvoyer
+  public ResponseEntity<String> deleteUser(@PathVariable("id") int id)
+      throws CodeCaseApiException{
       userService.deleteUser(id);
       return ResponseEntity.ok("User supprimé avec succès");
-    } catch (Exception e) {
-      return ExceptionManager.handleException(e);
-    }
   }
 }

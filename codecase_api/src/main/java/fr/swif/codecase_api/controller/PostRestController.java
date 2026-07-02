@@ -1,11 +1,11 @@
 package fr.swif.codecase_api.controller;
 
+import fr.swif.codecase_api.exception.CodeCaseApiException;
 import fr.swif.codecase_api.exception.ExceptionManager;
 import fr.swif.codecase_api.model.Post;
 import fr.swif.codecase_api.service.PostService;
-import java.util.Optional;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,9 +29,9 @@ import org.springframework.web.bind.annotation.RestController;
 // - @Controller qui marque la classe comme composant Spring MVC
 // gérant les requêtes HTTP
 // - @ResponseBody qui indique que la valeur retournée par chaque méthode
-// est sérialisée directement dans le corps de la réponse HTTP
-// (JSON par défaut avec Jackson), au lieu d'être interprétée comme un
-// nom de vue Thymeleaf/JSP
+// est sérialisée (conversion de l'objet en JSON) directement dans le corps
+// de la réponse HTTP (JSON par défaut avec Jackson), au lieu d'être interprétée
+// comme un nom de vue Thymeleaf/JSP
 @RestController
 // @RequiredArgsConstructor génère automatiquement un constructeur prenant
 // en paramètre tous les champs final et @NonNull de la classe
@@ -46,17 +46,17 @@ public class PostRestController {
    *<i>de UserRestController</i>
    *<h1></h1>
    *<hr>
-   *<p>Création d'un post</p>
+   *<p>Création d'un post
+   * Cette méthode ne lève que des unchecked exceptions</p>
    * @param post
    * @return
    */
   @PostMapping("/post")
-  public ResponseEntity<Post> createPost(@RequestBody Post post) {
-    try {
+  // ResponseEntity est une classe Spring qui représente toute la réponse HTTP
+  // que le controller va renvoyer
+  // @Valid permet de déclencher la Bean Validation sur l'objet qu'il annote
+  public ResponseEntity<Post> createPost(@Valid @RequestBody Post post) {
       return ResponseEntity.ok(postService.savePost(post));
-    } catch (Exception e) {
-      return ExceptionManager.handleException(e);
-    }
   }
 
   /**
@@ -69,12 +69,10 @@ public class PostRestController {
    * @return
    */
   @GetMapping("/posts")
-  public ResponseEntity<Iterable<Post>> getPosts() {
-    try {
+  // ResponseEntity est une classe Spring qui représente toute la réponse HTTP
+  // que le controller va renvoyer
+  public ResponseEntity<Iterable<Post>> getPosts() throws CodeCaseApiException {
       return ResponseEntity.ok(postService.getPosts());
-    } catch (Exception e) {
-      return ExceptionManager.handleException(e);
-    }
   }
 
   /**
@@ -88,12 +86,11 @@ public class PostRestController {
    * @return
    */
   @GetMapping("/post/{id}")
-  public ResponseEntity<Post> getPost(@PathVariable("id") int id) {
-    try {
+  // ResponseEntity est une classe Spring qui représente toute la réponse HTTP
+  // que le controller va renvoyer
+  public ResponseEntity<Post> getPost(@PathVariable("id") int id)
+      throws CodeCaseApiException {
       return ResponseEntity.ok(postService.getPost(id));
-    } catch (Exception e) {
-      return ExceptionManager.handleException(e);
-    }
   }
 
   /**
@@ -102,17 +99,17 @@ public class PostRestController {
    *<i>de UserRestController</i>
    *<h1></h1>
    *<hr>
-   *<p>Supprime un post par rapport à son id</p>
+   *<p>Supprime un post par rapport à son id
+   * Cette méthode ne lève que des unchecked exceptions</p>
    * @param id
    * @return
    */
   @DeleteMapping("/post/{id}")
-  public ResponseEntity<String> deletePost(@PathVariable("id") int id) {
-    try {
+  // ResponseEntity est une classe Spring qui représente toute la réponse HTTP
+  // que le controller va renvoyer
+  public ResponseEntity<String> deletePost(@PathVariable("id") int id)
+      throws CodeCaseApiException{
       postService.deletePost(id);
       return ResponseEntity.ok("Post supprimé");
-    } catch (Exception e) {
-      return ExceptionManager.handleException(e);
-    }
   }
 }

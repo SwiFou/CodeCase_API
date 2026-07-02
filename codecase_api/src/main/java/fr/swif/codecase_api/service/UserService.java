@@ -1,11 +1,10 @@
 package fr.swif.codecase_api.service;
 
-import fr.swif.codecase_api.exception.CodeCaseException;
+import fr.swif.codecase_api.exception.CodeCaseApiException;
+import fr.swif.codecase_api.exception.MessagesErreur;
 import fr.swif.codecase_api.model.User;
 import fr.swif.codecase_api.repository.UserRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +22,7 @@ import org.springframework.stereotype.Service;
 // @RequiredArgsConstructor génère automatiquement un constructeur prenant en
 // paramètre tous les champs final et @NotNull de la classe
 @RequiredArgsConstructor
-// @Service sert à indiquer que la classe détient la logique métier du CRUD
+// @Service sert à indiquer que la classe détient la logique métier
 @Service
 // @Transactional permet de garantir une transaction :
 // - Si tout se passe bien → COMMIT automatique à la fin
@@ -46,16 +45,16 @@ public class UserService {
    * @return Un Iterable composé de Users → c'est une interface qui
    * représente "quelque chose qu'on peut parcourir élément par élément"
    * Comme une arraylist mais peut parcourir n'importe quelle collection.
-   * @throws CodeCaseException
+   * @throws CodeCaseApiException
    */
   // Iterable → Interface qui peut être parcourue
-  public Iterable<User> getUsers() throws CodeCaseException {
+  public Iterable<User> getUsers() throws CodeCaseApiException {
     Iterable<User> users = userRepository.findAll();
     if(!users.iterator().hasNext()) {
       // iterator() -> curseur positionné au début de la collection
       // hasNext() -> retourne true s'il y a au moins 1 élément à partir
       // de la position actuelle
-      throw new CodeCaseException("Aucuns users trouvés", HttpStatus.NOT_FOUND);
+      throw new CodeCaseApiException(MessagesErreur.ALL_USERS_NOT_FOUND);
     }
     return users;
   }
@@ -70,12 +69,12 @@ public class UserService {
    * s'il existe grâce à findById()</p>
    * @param id l'id du User cherché
    * @return
-   * @throws CodeCaseException
+   * @throws CodeCaseApiException
    */
-  public User getUser(int id) throws CodeCaseException {
+  public User getUser(int id) throws CodeCaseApiException {
     return userRepository.findById(id)
-        .orElseThrow(() -> new CodeCaseException("User introuvable : "
-            + id, HttpStatus.NOT_FOUND));
+        .orElseThrow(() -> new CodeCaseApiException(
+            MessagesErreur.USER_NOT_FOUND));
   }
 
   /**
@@ -85,13 +84,17 @@ public class UserService {
    *<h1></h1>
    *<hr>
    *<p>Prends un objet User et le sauvegarde
-   * ou le mets à jour dans la BDD grâce à save()</p>
+   * ou le mets à jour dans la BDD grâce à save()
+   * Cette méthode ne lève que des unchecked exceptions</p>
    * @param user le User à créer ou modifier
    * @return Le User créé ou modifié
    */
   // @Transactional surcharge le readOnly de la classe
   @Transactional
-  public User saveUser(User user) {
+  public User saveUser(User user) throws CodeCaseApiException{
+    if(userRepository.findByUserEmail(user.getUserEmail()).isPresent()) {
+      throw new CodeCaseApiException(MessagesErreur.USER_ALREADY_EXISTS);
+    }
     return userRepository.save(user);
   }
 
@@ -105,15 +108,16 @@ public class UserService {
    * Email, Mot de passe, Avatar</p>
    * @param id L'id du User qui met à jour
    * @param user L'objet User qui est mis à jour
-   * @return
-   * @throws CodeCaseException
+   * @return Le User modifié
+   * @throws CodeCaseApiException
    */
   @Transactional
-  public User updateUser(int id, User user) throws CodeCaseException {
+  public User updateUser(int id, User user) throws CodeCaseApiException {
 
     User userActuel = getUser(id);
 
-      if(user.getUserEmail() != null) {
+      if(user.getUserEmail() != null &&
+          !user.getUserEmail().equals(userActuel.getUserEmail())) {
         userActuel.setUserEmail(user.getUserEmail());
       }
 
@@ -121,7 +125,8 @@ public class UserService {
         userActuel.setUserMdp(user.getUserMdp());
       }
 
-      if(user.getUserAvatar() != null) {
+      if(user.getUserAvatar() != null &&
+      !user.getUserAvatar().equals(userActuel.getUserAvatar())) {
         userActuel.setUserAvatar(user.getUserAvatar());
       }
     return userRepository.save(userActuel);
@@ -133,12 +138,16 @@ public class UserService {
    *<i>de UserService</i>
    *<h1></h1>
    *<hr>
-   *<p>Prend l'id d'un User et le supprime grâce à deleteById()</p>
+   *<p>Prend l'id d'un User et le supprime grâce à deleteById()
+   * Cette méthode ne lève que des unchecked exceptions</p>
    * @param id L'id du User à supprimer
    */
   // @Transactional surcharge le readOnly de la classe
   @Transactional
-  public void deleteUser(int id) {
+  public void deleteUser(int id) throws CodeCaseApiException{
+    if (!userRepository.existsById(id)) {
+      throw new CodeCaseApiException(MessagesErreur.USER_NOT_FOUND);
+    }
     userRepository.deleteById(id);
   }
 
@@ -154,9 +163,13 @@ public class UserService {
    */
   // @Transactional surcharge le readOnly de la classe
   @Transactional
-  public void anonymisationUser(int id) throws CodeCaseException {
+  public void anonymisationUser(int id) throws CodeCaseApiException {
 
     User userExistant = getUser(id);
+
+    if (userExistant.getUserEmail().endsWith("@anonymized.invalid")) {
+      throw new CodeCaseApiException(MessagesErreur.USER_ALREADY_ANONYMISED);
+    }
 
     if(userExistant.getUserPseudo() != null) {
       userExistant.setUserPseudo("Utilisateur supprimé-" + id);
@@ -165,11 +178,14 @@ public class UserService {
     // Permet de remplacer le hash du mot de passe valide en
     // un hash invalide et inutilisable
     if(userExistant.getUserMdp() != null) {
-      userExistant.setUserMdp("{erased}");
+      userExistant.setUserMdp("erased");
     }
 
+    // Le .invalid est destiné aux utilisations de constructions en ligne
+    // de noms de domaines dont il est sûr qu'ils sont invalides
+    // voir http://abcdrfc.free.fr/rfc-vf/rfc2606.html
     if(userExistant.getUserEmail() != null) {
-      userExistant.setUserEmail("deleted-" + id + "@anonymized.invalid");
+      userExistant.setUserEmail("deleted" + id + "-@anonymized.invalid");
     }
     userRepository.save(userExistant);
   }

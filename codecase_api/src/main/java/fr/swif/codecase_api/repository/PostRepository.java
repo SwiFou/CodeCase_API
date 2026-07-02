@@ -1,7 +1,7 @@
 package fr.swif.codecase_api.repository;
 
 import fr.swif.codecase_api.model.Post;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -19,6 +19,6 @@ import org.springframework.stereotype.Repository;
 // @Repository est un stéréotype Spring qui marque une classe
 // comme couche d'accès aux données (DAO)
 @Repository
-public interface PostRepository  extends CrudRepository<Post, Integer> {
+public interface PostRepository  extends JpaRepository<Post, Integer> {
 
 }
