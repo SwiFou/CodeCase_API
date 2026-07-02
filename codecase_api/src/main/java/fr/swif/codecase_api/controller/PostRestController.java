@@ -46,7 +46,7 @@ public class PostRestController {
    *<i>de UserRestController</i>
    *<h1></h1>
    *<hr>
-   *<p>Création d'un post
+   *<p>Création d'un Post
    * Cette méthode ne lève que des unchecked exceptions</p>
    * @param post
    * @return
@@ -62,11 +62,12 @@ public class PostRestController {
   /**
    * Méthode pour lister tous les posts
    *
-   *<i>de UserRestController</i>
+   *<i>de PostRestController</i>
    *<h1></h1>
    *<hr>
-   *<p>Liste tous les posts</p>
+   *<p>Liste tous les Posts</p>
    * @return
+   * @throws CodeCaseApiException
    */
   @GetMapping("/posts")
   // ResponseEntity est une classe Spring qui représente toute la réponse HTTP
@@ -78,12 +79,13 @@ public class PostRestController {
   /**
    * Méthode pour lister un post par rapport à son id
    *
-   *<i>de UserRestController</i>
+   *<i>de PostRestController</i>
    *<h1></h1>
    *<hr>
-   *<p>Liste un post par rapport à son id</p>
+   *<p>Liste un Post par rapport à son id</p>
    * @param id
    * @return
+   * @throws CodeCaseApiException
    */
   @GetMapping("/post/{id}")
   // ResponseEntity est une classe Spring qui représente toute la réponse HTTP
@@ -99,7 +101,7 @@ public class PostRestController {
    *<i>de UserRestController</i>
    *<h1></h1>
    *<hr>
-   *<p>Supprime un post par rapport à son id
+   *<p>Supprime un Post par rapport à son id
    * Cette méthode ne lève que des unchecked exceptions</p>
    * @param id
    * @return
@@ -108,7 +110,7 @@ public class PostRestController {
   // ResponseEntity est une classe Spring qui représente toute la réponse HTTP
   // que le controller va renvoyer
   public ResponseEntity<String> deletePost(@PathVariable("id") int id)
-      throws CodeCaseApiException{
+      throws CodeCaseApiException {
       postService.deletePost(id);
       return ResponseEntity.ok("Post supprimé");
   }

@@ -1,8 +1,8 @@
 package fr.swif.codecase_api.controller;
 
 import fr.swif.codecase_api.exception.CodeCaseApiException;
-import fr.swif.codecase_api.model.Langage;
-import fr.swif.codecase_api.service.LangageService;
+import fr.swif.codecase_api.model.Technologie;
+import fr.swif.codecase_api.service.TechnologieService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * LangageRestController
+ * TechnologieRestController
  * <i>de fr.swif.codecase_api.controller</i>
  * <hr>
- * <p>Controller REST pour les endpoints Langage</p>
+ * <p>Controller REST pour les endpoints Technologie</p>
  *
  * @author Calderoli Alexandre
  * @version 0.0.1
@@ -35,85 +35,84 @@ import org.springframework.web.bind.annotation.RestController;
 // @RequiredArgsConstructor génère automatiquement un constructeur prenant
 // en paramètre tous les champs final et @NonNull de la classe
 @RequiredArgsConstructor
-public class LangageRestController {
+public class TechnologieRestController {
 
-  private final LangageService langageService;
+  private final TechnologieService technologieService;
 
   /**
-   * Méthode createLangage
+   * Méthode createTechnologie
    *
-   *<i>de LangageRestController</i>
+   *<i>de TechnologieRestController</i>
    *<h1></h1>
    *<hr>
-   *<p>Création d'un Langage
+   *<p>Création d'un post
    * Cette méthode ne lève que des unchecked exceptions</p>
-   * @param langage
+   * @param technologie
    * @return
    */
-  @PostMapping("/langage")
+  @PostMapping("/technologie")
   // ResponseEntity est une classe Spring qui représente toute la réponse HTTP
   // que le controller va renvoyer
   // @Valid permet de déclencher la Bean Validation sur l'objet qu'il annote
-  public ResponseEntity<Langage> createLangage(@Valid
-  @RequestBody Langage langage) {
-    return ResponseEntity.ok(langageService.saveLangage(langage));
+  public ResponseEntity<Technologie> createTechnologie(@Valid @RequestBody Technologie technologie) {
+    return ResponseEntity.ok(technologieService.saveTechnologie(technologie));
   }
 
   /**
-   * Méthode getLangages
+   * Méthode getTechnologies
    *
-   *<i>de LangageRestController</i>
+   *<i>de TechnologieRestController</i>
    *<h1></h1>
    *<hr>
-   *<p>Liste tous les Langages</p>
+   *<p>Liste tous les posts</p>
    * @return
    * @throws CodeCaseApiException
    */
-  @GetMapping("/langages")
+  @GetMapping("/technologies")
   // ResponseEntity est une classe Spring qui représente toute la réponse HTTP
   // que le controller va renvoyer
-  public ResponseEntity<Iterable<Langage>> getLangages()
-      throws CodeCaseApiException {
-    return ResponseEntity.ok(langageService.getLangages());
+  public ResponseEntity<Iterable<Technologie>> getTechnologies() throws CodeCaseApiException {
+    return ResponseEntity.ok(technologieService.getTechnologies());
   }
 
   /**
-   * Méthode getLangage
+   * Méthode getTechnologie
    *
-   *<i>de LangageRestController</i>
+   *<i>de TechnologieRestController</i>
    *<h1></h1>
    *<hr>
-   *<p>Liste un Langage par rapport à son id</p>
+   *<p>Liste une Technologie par rapport à son id</p>
    * @param id
    * @return
    * @throws CodeCaseApiException
    */
-  @GetMapping("/langage/{id}")
+  @GetMapping("/technologie/{id}")
   // ResponseEntity est une classe Spring qui représente toute la réponse HTTP
   // que le controller va renvoyer
-  public ResponseEntity<Langage> getLangage(@PathVariable("id") int id)
+  public ResponseEntity<Technologie> getTechnologie(@PathVariable("id") int id)
       throws CodeCaseApiException {
-    return ResponseEntity.ok(langageService.getLangage(id));
+    return ResponseEntity.ok(technologieService.getTechnologie(id));
   }
 
   /**
-   * Méthode deleteLangage
+   * Méthode deleteTechnologie
    *
-   *<i>de LangageRestController</i>
+   *<i>de TechnologieRestController</i>
    *<h1></h1>
    *<hr>
-   *<p>Supprime un Langage par rapport à son id
+   *<p>Supprime une Technologie par rapport à son id
    * Cette méthode ne lève que des unchecked exceptions</p>
    * @param id
    * @return
    * @throws CodeCaseApiException
    */
-  @DeleteMapping("/langage/{id}")
+  @DeleteMapping("/technologie/{id}")
   // ResponseEntity est une classe Spring qui représente toute la réponse HTTP
   // que le controller va renvoyer
-  public ResponseEntity<String> deleteLangage(@PathVariable("id") int id)
+  public ResponseEntity<String> deleteTechnologie(@PathVariable("id") int id)
       throws CodeCaseApiException {
-    langageService.deleteLangage(id);
-    return ResponseEntity.ok("Langage supprimé");
+    technologieService.deleteTechnologie(id);
+    return ResponseEntity.ok("Technologie supprimée");
   }
+
 }

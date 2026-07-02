@@ -63,6 +63,7 @@ CREATE TABLE Post(
    langageId INT NOT NULL,
    userId INT NOT NULL,
    PRIMARY KEY(postId),
+   FOREIGN KEY(technologieId) REFERENCES Technologie(technologieId),
    FOREIGN KEY(langageId) REFERENCES Langage(langageId),
    FOREIGN KEY(userId) REFERENCES User_(userId)
 )ENGINE=InnoDB;
@@ -101,14 +102,6 @@ CREATE TABLE Vote(
    PRIMARY KEY(voteId),
    FOREIGN KEY(postId) REFERENCES Post(postId),
    FOREIGN KEY(userId) REFERENCES User_(userId)
-)ENGINE=InnoDB;
-
-CREATE TABLE Concerner(
-   postId INT,
-   technologieId INT,
-   PRIMARY KEY(postId, technologieId),
-   FOREIGN KEY(postId) REFERENCES Post(postId),
-   FOREIGN KEY(technologieId) REFERENCES Technologie(technologieId)
 )ENGINE=InnoDB;
 
 CREATE TABLE Etre_dans(

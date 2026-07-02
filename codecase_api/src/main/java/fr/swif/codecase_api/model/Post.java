@@ -71,16 +71,18 @@ public class Post {
   private User userId;
 
   /**
-   * Variable langageId de type langage
+   * Variable langageId de type Langage
    */
   @ManyToOne
   @JoinColumn(name = "langageId")
   private Langage langageId;
 
   /**
-   * Variable tagCustom, dans une Arraylist de type Tag
+   * Variable technologieId de type Technologie
    */
-//  Set<Tag> tagCustom;
+  @ManyToOne
+  @JoinColumn(name = "technologieId")
+  private Technologie technologieId;
 
   /**
    * Variable creationDatePost

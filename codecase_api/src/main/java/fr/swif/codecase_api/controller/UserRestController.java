@@ -73,7 +73,7 @@ public class UserRestController {
   @GetMapping("/users")
   // ResponseEntity est une classe Spring qui représente toute la réponse HTTP
   // que le controller va renvoyer
-  public ResponseEntity<Iterable<User>> getUsers() throws CodeCaseApiException{
+  public ResponseEntity<Iterable<User>> getUsers() throws CodeCaseApiException {
       return ResponseEntity.ok(userService.getUsers());
   }
 
@@ -91,7 +91,7 @@ public class UserRestController {
   // ResponseEntity est une classe Spring qui représente toute la réponse HTTP
   // que le controller va renvoyer
   public ResponseEntity<User> getUser(@PathVariable("id") int id)
-      throws CodeCaseApiException{
+      throws CodeCaseApiException {
       return ResponseEntity.ok(userService.getUser(id));
   }
 
@@ -111,7 +111,7 @@ public class UserRestController {
   // que le controller va renvoyer
   // @Valid permet de déclencher la Bean Validation sur l'objet qu'il annote
   public ResponseEntity<User> updateUser(@PathVariable("id") int id,
-      @Valid @RequestBody User user) throws CodeCaseApiException{
+      @Valid @RequestBody User user) throws CodeCaseApiException {
       return ResponseEntity.ok(userService.updateUser(id, user));
   }
 
@@ -149,7 +149,7 @@ public class UserRestController {
   // ResponseEntity est une classe Spring qui représente toute la réponse HTTP
   // que le controller va renvoyer
   public ResponseEntity<String> deleteUser(@PathVariable("id") int id)
-      throws CodeCaseApiException{
+      throws CodeCaseApiException {
       userService.deleteUser(id);
       return ResponseEntity.ok("User supprimé avec succès");
   }
