@@ -88,6 +88,8 @@ public class ExceptionManager {
         // getFieldErrors() ne retourne que les erreurs liées aux champs (et non
         // aux erreurs globales de l'objet)
         .getFieldErrors()
+        // stream() transforme la collection de getFieldErrors() en un flux
+        // d'éléments sur lequel on peut enchaîner des opérations
         .stream()
         // Pour chaque champ en erreur, on construit un message
         // "nomDuChamp : messageDeLAnnotation"
