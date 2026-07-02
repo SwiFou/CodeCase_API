@@ -54,7 +54,8 @@ public class TechnologieRestController {
   // ResponseEntity est une classe Spring qui représente toute la réponse HTTP
   // que le controller va renvoyer
   // @Valid permet de déclencher la Bean Validation sur l'objet qu'il annote
-  public ResponseEntity<Technologie> createTechnologie(@Valid @RequestBody Technologie technologie) {
+  public ResponseEntity<Technologie> createTechnologie(@Valid
+  @RequestBody Technologie technologie) {
     return ResponseEntity.ok(technologieService.saveTechnologie(technologie));
   }
 
@@ -71,7 +72,8 @@ public class TechnologieRestController {
   @GetMapping("/technologies")
   // ResponseEntity est une classe Spring qui représente toute la réponse HTTP
   // que le controller va renvoyer
-  public ResponseEntity<Iterable<Technologie>> getTechnologies() throws CodeCaseApiException {
+  public ResponseEntity<Iterable<Technologie>> getTechnologies()
+      throws CodeCaseApiException {
     return ResponseEntity.ok(technologieService.getTechnologies());
   }
 
