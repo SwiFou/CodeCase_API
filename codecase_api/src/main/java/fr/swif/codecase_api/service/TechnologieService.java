@@ -109,7 +109,7 @@ public class TechnologieService {
   @Transactional
   public void deleteTechnologie(int id) throws CodeCaseApiException{
     if (!technologieRepository.existsById(id)) {
-      throw new CodeCaseApiException(MessagesErreur.LANGAGE_NOT_FOUND);
+      throw new CodeCaseApiException(MessagesErreur.TECHNOLOGIE_NOT_FOUND);
     }
     technologieRepository.deleteById(id);
   }
