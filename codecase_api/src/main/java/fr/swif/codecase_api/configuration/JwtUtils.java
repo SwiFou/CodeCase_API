@@ -87,7 +87,7 @@ public class JwtUtils {
     return extractionExpirationDate(token).before(new Date());
   }
 
-  private String extractEmail(String token) {
+  public String extractEmail(String token) {
     return extractionClaim(token, Claims::getSubject);
   }
 
