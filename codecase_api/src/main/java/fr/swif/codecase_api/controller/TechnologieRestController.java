@@ -1,9 +1,8 @@
 package fr.swif.codecase_api.controller;
 
 import fr.swif.codecase_api.exception.CodeCaseApiException;
-import fr.swif.codecase_api.exception.ExceptionManager;
-import fr.swif.codecase_api.model.Post;
-import fr.swif.codecase_api.service.PostService;
+import fr.swif.codecase_api.model.Technologie;
+import fr.swif.codecase_api.service.TechnologieService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,14 +14,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * UserRestController
+ * TechnologieRestController
  * <i>de fr.swif.codecase_api.controller</i>
  * <hr>
- * <p>Controller REST pour les endpoints Post</p>
+ * <p>Controller REST pour les endpoints Technologie</p>
  *
  * @author Calderoli Alexandre
  * @version 0.0.1
- * @since 11/06/2026
+ * @since 02/07/2026
  */
 
 // @RestController est une combinaison de :
@@ -36,82 +35,86 @@ import org.springframework.web.bind.annotation.RestController;
 // @RequiredArgsConstructor génère automatiquement un constructeur prenant
 // en paramètre tous les champs final et @NonNull de la classe
 @RequiredArgsConstructor
-public class PostRestController {
+public class TechnologieRestController {
 
-  private final PostService postService;
+  private final TechnologieService technologieService;
 
   /**
-   * Méthode pour la création d'un post
+   * Méthode createTechnologie
    *
-   *<i>de UserRestController</i>
+   *<i>de TechnologieRestController</i>
    *<h1></h1>
    *<hr>
-   *<p>Création d'un Post
+   *<p>Création d'un post
    * Cette méthode ne lève que des unchecked exceptions</p>
-   * @param post
+   * @param technologie
    * @return
    */
-  @PostMapping("/post")
+  @PostMapping("/technologie")
   // ResponseEntity est une classe Spring qui représente toute la réponse HTTP
   // que le controller va renvoyer
   // @Valid permet de déclencher la Bean Validation sur l'objet qu'il annote
-  public ResponseEntity<Post> createPost(@Valid @RequestBody Post post) {
-      return ResponseEntity.ok(postService.savePost(post));
+  public ResponseEntity<Technologie> createTechnologie(@Valid
+  @RequestBody Technologie technologie) {
+    return ResponseEntity.ok(technologieService.saveTechnologie(technologie));
   }
 
   /**
-   * Méthode pour lister tous les posts
+   * Méthode getTechnologies
    *
-   *<i>de PostRestController</i>
+   *<i>de TechnologieRestController</i>
    *<h1></h1>
    *<hr>
-   *<p>Liste tous les Posts</p>
+   *<p>Liste tous les posts</p>
    * @return
    * @throws CodeCaseApiException
    */
-  @GetMapping("/posts")
+  @GetMapping("/technologies")
   // ResponseEntity est une classe Spring qui représente toute la réponse HTTP
   // que le controller va renvoyer
-  public ResponseEntity<Iterable<Post>> getPosts() throws CodeCaseApiException {
-      return ResponseEntity.ok(postService.getPosts());
+  public ResponseEntity<Iterable<Technologie>> getTechnologies()
+      throws CodeCaseApiException {
+    return ResponseEntity.ok(technologieService.getTechnologies());
   }
 
   /**
-   * Méthode pour lister un post par rapport à son id
+   * Méthode getTechnologie
    *
-   *<i>de PostRestController</i>
+   *<i>de TechnologieRestController</i>
    *<h1></h1>
    *<hr>
-   *<p>Liste un Post par rapport à son id</p>
+   *<p>Liste une Technologie par rapport à son id</p>
    * @param id
    * @return
    * @throws CodeCaseApiException
    */
-  @GetMapping("/post/{id}")
+  @GetMapping("/technologie/{id}")
   // ResponseEntity est une classe Spring qui représente toute la réponse HTTP
   // que le controller va renvoyer
-  public ResponseEntity<Post> getPost(@PathVariable("id") int id)
+  public ResponseEntity<Technologie> getTechnologie(@PathVariable("id") int id)
       throws CodeCaseApiException {
-      return ResponseEntity.ok(postService.getPost(id));
+    return ResponseEntity.ok(technologieService.getTechnologie(id));
   }
 
   /**
-   * Méthode pour supprimer un post par rapport à son id
+   * Méthode deleteTechnologie
    *
-   *<i>de UserRestController</i>
+   *<i>de TechnologieRestController</i>
    *<h1></h1>
    *<hr>
-   *<p>Supprime un Post par rapport à son id
+   *<p>Supprime une Technologie par rapport à son id
    * Cette méthode ne lève que des unchecked exceptions</p>
    * @param id
    * @return
+   * @throws CodeCaseApiException
    */
-  @DeleteMapping("/post/{id}")
+  @DeleteMapping("/technologie/{id}")
   // ResponseEntity est une classe Spring qui représente toute la réponse HTTP
   // que le controller va renvoyer
-  public ResponseEntity<String> deletePost(@PathVariable("id") int id)
+  public ResponseEntity<String> deleteTechnologie(@PathVariable("id") int id)
       throws CodeCaseApiException {
-      postService.deletePost(id);
-      return ResponseEntity.ok("Post supprimé");
+    technologieService.deleteTechnologie(id);
+    return ResponseEntity.ok("Technologie supprimée");
   }
+
 }

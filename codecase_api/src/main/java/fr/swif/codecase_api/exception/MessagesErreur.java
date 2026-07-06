@@ -22,6 +22,16 @@ public enum MessagesErreur {
   POST_NOT_FOUND(HttpStatus.NOT_FOUND, "Le post cherché est introuvable"),
   POST_ALREADY_EXISTS(HttpStatus.CONFLICT, "Le post existe déjà"),
 
+  // Pour Langage
+  ALL_LANGAGES_NOT_FOUND(HttpStatus.NOT_FOUND, "Les langages cherchés sont introuvables"),
+  LANGAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "Le langage cherché est introuvable"),
+  LANGAGE_ALREADY_EXISTS(HttpStatus.CONFLICT, "Le langage existe déjà"),
+
+  // Pour Technologie
+  ALL_TECHNOLOGIES_NOT_FOUND(HttpStatus.NOT_FOUND, "Les technologies cherchées sont introuvables"),
+  TECHNOLOGIE_NOT_FOUND(HttpStatus.NOT_FOUND, "La technologie cherchée est introuvable"),
+  TECHNOLOGIE_ALREADY_EXISTS(HttpStatus.CONFLICT, "La technologie existe déjà"),
+
   // Pour Commentaire
   COMMENTAIRE_NOT_FOUND(HttpStatus.NOT_FOUND, "Commentaire introuvable"),
 

@@ -41,7 +41,7 @@ public class Technologie {
   /**
    * Variable technologieIntitule
    */
-  @NotBlank
+//  @NotBlank
   @Column(name = "technologieIntitule")
   private String technologieIntitule;
 

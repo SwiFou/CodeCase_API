@@ -1,9 +1,8 @@
 package fr.swif.codecase_api.controller;
 
 import fr.swif.codecase_api.exception.CodeCaseApiException;
-import fr.swif.codecase_api.exception.ExceptionManager;
-import fr.swif.codecase_api.model.Post;
-import fr.swif.codecase_api.service.PostService;
+import fr.swif.codecase_api.model.Langage;
+import fr.swif.codecase_api.service.LangageService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,14 +14,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * UserRestController
+ * LangageRestController
  * <i>de fr.swif.codecase_api.controller</i>
  * <hr>
- * <p>Controller REST pour les endpoints Post</p>
+ * <p>Controller REST pour les endpoints Langage</p>
  *
  * @author Calderoli Alexandre
  * @version 0.0.1
- * @since 11/06/2026
+ * @since 02/07/2026
  */
 
 // @RestController est une combinaison de :
@@ -36,82 +35,85 @@ import org.springframework.web.bind.annotation.RestController;
 // @RequiredArgsConstructor génère automatiquement un constructeur prenant
 // en paramètre tous les champs final et @NonNull de la classe
 @RequiredArgsConstructor
-public class PostRestController {
+public class LangageRestController {
 
-  private final PostService postService;
+  private final LangageService langageService;
 
   /**
-   * Méthode pour la création d'un post
+   * Méthode createLangage
    *
-   *<i>de UserRestController</i>
+   *<i>de LangageRestController</i>
    *<h1></h1>
    *<hr>
-   *<p>Création d'un Post
+   *<p>Création d'un Langage
    * Cette méthode ne lève que des unchecked exceptions</p>
-   * @param post
+   * @param langage
    * @return
    */
-  @PostMapping("/post")
+  @PostMapping("/langage")
   // ResponseEntity est une classe Spring qui représente toute la réponse HTTP
   // que le controller va renvoyer
   // @Valid permet de déclencher la Bean Validation sur l'objet qu'il annote
-  public ResponseEntity<Post> createPost(@Valid @RequestBody Post post) {
-      return ResponseEntity.ok(postService.savePost(post));
+  public ResponseEntity<Langage> createLangage(@Valid
+  @RequestBody Langage langage) {
+    return ResponseEntity.ok(langageService.saveLangage(langage));
   }
 
   /**
-   * Méthode pour lister tous les posts
+   * Méthode getLangages
    *
-   *<i>de PostRestController</i>
+   *<i>de LangageRestController</i>
    *<h1></h1>
    *<hr>
-   *<p>Liste tous les Posts</p>
+   *<p>Liste tous les Langages</p>
    * @return
    * @throws CodeCaseApiException
    */
-  @GetMapping("/posts")
+  @GetMapping("/langages")
   // ResponseEntity est une classe Spring qui représente toute la réponse HTTP
   // que le controller va renvoyer
-  public ResponseEntity<Iterable<Post>> getPosts() throws CodeCaseApiException {
-      return ResponseEntity.ok(postService.getPosts());
+  public ResponseEntity<Iterable<Langage>> getLangages()
+      throws CodeCaseApiException {
+    return ResponseEntity.ok(langageService.getLangages());
   }
 
   /**
-   * Méthode pour lister un post par rapport à son id
+   * Méthode getLangage
    *
-   *<i>de PostRestController</i>
+   *<i>de LangageRestController</i>
    *<h1></h1>
    *<hr>
-   *<p>Liste un Post par rapport à son id</p>
+   *<p>Liste un Langage par rapport à son id</p>
    * @param id
    * @return
    * @throws CodeCaseApiException
    */
-  @GetMapping("/post/{id}")
+  @GetMapping("/langage/{id}")
   // ResponseEntity est une classe Spring qui représente toute la réponse HTTP
   // que le controller va renvoyer
-  public ResponseEntity<Post> getPost(@PathVariable("id") int id)
+  public ResponseEntity<Langage> getLangage(@PathVariable("id") int id)
       throws CodeCaseApiException {
-      return ResponseEntity.ok(postService.getPost(id));
+    return ResponseEntity.ok(langageService.getLangage(id));
   }
 
   /**
-   * Méthode pour supprimer un post par rapport à son id
+   * Méthode deleteLangage
    *
-   *<i>de UserRestController</i>
+   *<i>de LangageRestController</i>
    *<h1></h1>
    *<hr>
-   *<p>Supprime un Post par rapport à son id
+   *<p>Supprime un Langage par rapport à son id
    * Cette méthode ne lève que des unchecked exceptions</p>
    * @param id
    * @return
+   * @throws CodeCaseApiException
    */
-  @DeleteMapping("/post/{id}")
+  @DeleteMapping("/langage/{id}")
   // ResponseEntity est une classe Spring qui représente toute la réponse HTTP
   // que le controller va renvoyer
-  public ResponseEntity<String> deletePost(@PathVariable("id") int id)
+  public ResponseEntity<String> deleteLangage(@PathVariable("id") int id)
       throws CodeCaseApiException {
-      postService.deletePost(id);
-      return ResponseEntity.ok("Post supprimé");
+    langageService.deleteLangage(id);
+    return ResponseEntity.ok("Langage supprimé");
   }
 }
