@@ -34,6 +34,10 @@ import org.springframework.stereotype.Component;
  * @since 17/06/2026
  */
 
+// @Component est une annotation Spring qui marque une classe comme bean géré
+// par le conteneur IoC (Inversion of Control) de Spring
+// Spring scan tous les packages et instancie automatiquement toutes les classes
+// annotées @Component
 @Component
 public class JwtUtils {
 
@@ -50,58 +54,177 @@ public class JwtUtils {
   @Value("${app.expiration-time}")
   private long expirationTime;
 
+  /**
+   * Méthode générerToken
+   *
+   *<i>de JwtUtils</i>
+   *<h1></h1>
+   *<hr>
+   *<p>Cette méthode permet de générer un token JWT à partir de l'email de
+   * l'utilisateur</p>
+   * @param userEmail L'email de l'utilisateur, utilisé comme subject du token
+   * @return Le token JWT signé sous forme de chaîne compactée
+   */
   public String genererToken(String userEmail) {
+    // Map<> est une collection d'associations clé-valeur
+
+    // Pour l'instant claims est vide, mais pourra contenir le Role par exemple
+    // rajouter des claims.put("clé", "valeur")
     Map<String, Object> claims = new HashMap<>();
     return creerToken(claims, userEmail);
   }
 
+  /**
+   * Méthode creerToken
+   *
+   *<i>de JwtUtils</i>
+   *<h1></h1>
+   *<hr>
+   *<p>Cette méthode permet de construire un token JWT signé avec les claims et
+   * le subject fournis</p>
+   * @param claims Les claims additionnels à inclure dans le token. Ce sont
+   *               des informations (paire clé-valeur) contenue dans le payload
+   *               du token JWT
+   * @param subject Le subject du token (ici l'email de l'utilisateur)
+   * @return Le token JWT signé et compacté
+   */
   private String creerToken(Map<String, Object> claims, String subject) {
     return Jwts.builder()
-        .claims(claims)
-        .subject(subject)
-        .issuedAt(new Date(System.currentTimeMillis()))
+        .claims(claims) // Données additionnelles (vide ici, pour l'instant)
+        .subject(subject) // L'identifiant principal (l'émail)
+        .issuedAt(new Date(System.currentTimeMillis())) // La date de création
+        // La date d'expiration
         .expiration(new Date(System.currentTimeMillis() + expirationTime))
-        .signWith(getSignatureKey())
-        .compact();
+        .signWith(getSignatureKey()) // La signature avec la clé secrète
+        .compact(); // Sérialise le tout en une chaîne JWT (header.payload.signature)
   }
 
+  /**
+   * Méthode getSignatureKey
+   *
+   *<i>de JwtUtils</i>
+   *<h1></h1>
+   *<hr>
+   *<p>Cette méthode permet de construire la clé de signature HMAC-SHA à partir
+   * de la clé secrète configurée (dans application.properties), encodée en
+   * UTF-8.</p>
+   * @return La clé secrète utilisée pour signer et vérifier les tokens
+   */
   private SecretKey getSignatureKey() {
     byte[] keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
     return Keys.hmacShaKeyFor(keyBytes);
   }
 
-  public boolean validerToken(String token, UserDetailsImpl userDetailsImpl) {
+  /**
+   * Méthode validerToken
+   *
+   *<i>de JwtUtils</i>
+   *<h1></h1>
+   *<hr>
+   *<p>Cette méthode permet de valider un token JWT en vérifiant que l'email
+   * extrait correspond bien à l'utilisateur fourni et que le token n'est pas
+   * expiré.</p>
+   * @param token Le token JWT à valider
+   * @param userDetails Les détails de l'utilisateur à comparer avec le contenu
+   *                    du token
+   * @return True si le token est valide et correspond à l'utilisateur, sinon
+   * false
+   */
+  public boolean validerToken(String token, UserDetails userDetails) {
     try{
       String userEmailExtrait = extractEmail(token);
-      return (userEmailExtrait.equals(userDetailsImpl.getUsername()) && !expirationToken(token));
+      return (userEmailExtrait.equals(userDetails.getUsername())
+          && !expirationToken(token));
     } catch (JwtException | IllegalArgumentException e) {
       return false;
     }
   }
 
+  /**
+   * Méthode extractionExpirationDate
+   *
+   *<i>de JwtUtils</i>
+   *<h1></h1>
+   *<hr>
+   *<p>Cette méthode permet d'extraire la date d'expiration contenue dans le
+   * token</p>
+   * @param token Le token JWT
+   * @return La date d'expiration du token extraite
+   */
   private Date extractionExpirationDate(String token) {
     return extractionClaim(token, Claims::getExpiration);
   }
 
+  /**
+   * Méthode expirationToken
+   *
+   *<i>de JwtUtils</i>
+   *<h1></h1>
+   *<hr>
+   *<p>Cette méthode permet de vérifier si le token envoyé est expiré en
+   * comparant sa date d'expiration avec la date actuelle</p>
+   * @param token Le token JWT
+   * @return True si le token est expiré, sinon false
+   */
   private boolean expirationToken(String token) {
     return extractionExpirationDate(token).before(new Date());
   }
 
+  /**
+   * Méthode extractEmail
+   *
+   *<i>de JwtUtils</i>
+   *<h1></h1>
+   *<hr>
+   *<p>Cette méthode permet d'extraire l'email (donc le subject) contenu dans
+   * le token</p>
+   * @param token Le token JWT
+   * @return L'email de l'utilisateur associé au token
+   */
   public String extractEmail(String token) {
     return extractionClaim(token, Claims::getSubject);
   }
 
+  /**
+   * Méthode extractionClaim
+   *
+   *<i>de JwtUtils</i>
+   *<h1></h1>
+   *<hr>
+   *<p>Cette méthode permet d'extraire un claim spécifique du token, via une
+   * fonction de résolution appliquée aux Claims</p>
+   * @param token Le token JWT
+   * @param claimsResolver La fonction extrayant la valeur souhaitée depuis les
+   *                       Claims
+   * @param <T> Le type de la valeur extraite
+   * @return La valeur du claim extrait
+   */
   private <T> T extractionClaim(String token, Function<Claims, T> claimsResolver) {
     final Claims claims = extractAllClaims(token);
     return claimsResolver.apply(claims);
   }
 
+  /**
+   * Méthode extractAllClaims
+   *
+   *<i>de JwtUtils</i>
+   *<h1></h1>
+   *<hr>
+   *<p>Cette méthode permet de parser le token JWT et de vérifier sa signature
+   * à l'aide de la clé secrète.
+   * Retourne l'ensemble des claims (payload) contenus dans le token.
+   * Lève une JwtException si le token est invalide, expiré côté format, ou mal
+   * signé. Elle est catchée dans la méthode validerToken</p>
+   * @param token Le token JWT à parser
+   * @return Les claims extraits du token
+   */
   private Claims extractAllClaims(String token) {
-    return Jwts.parser()
-        .verifyWith(getSignatureKey())
+    return Jwts.parser() // Créer un parseur
+        .verifyWith(getSignatureKey()) // Configure la vérification avec la clé
+                                      // secrète
         .build()
-        .parseSignedClaims(token)
-        .getPayload();
+        .parseSignedClaims(token) // Parse le token en vérifiant la signature
+        .getPayload(); // Récupère les claims (payload) du token
   }
 
 

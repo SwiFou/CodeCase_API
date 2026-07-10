@@ -5,7 +5,7 @@ use codecase_stage;
 CREATE TABLE User_(
    userId INT AUTO_INCREMENT,
    userPseudo VARCHAR(50) NOT NULL,
-   userMdp VARCHAR(20) NOT NULL,
+   userMdp VARCHAR(255) NOT NULL,
    userDateCreationCompte DATE NOT NULL,
    userDerniereConnexion DATETIME NOT NULL,
    userEmail VARCHAR(100) NOT NULL,

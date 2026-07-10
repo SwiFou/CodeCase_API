@@ -16,6 +16,7 @@ public enum MessagesErreur {
   USER_ALREADY_ANONYMISED(HttpStatus.CONFLICT, "Ce compte est déjà anonymisé"),
   EMAIL_USER_ALREADY_EXIST(HttpStatus.CONFLICT, "Cette adresse mail est déjà enregistrée"),
   AVATAR_USER_ALREADY_EXIST(HttpStatus.CONFLICT, "Cette photo de profil est déjà enregistrée"),
+  IDENTIFIANTS_USER_INVALIDES(HttpStatus.UNAUTHORIZED, "Adresse mail ou mot de passe invalide"),
 
   // Pour Post
   ALL_POSTS_NOT_FOUND(HttpStatus.NOT_FOUND, "Les posts cherchés sont introuvables"),

@@ -7,6 +7,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -78,14 +80,12 @@ public class User {
   /**
    * Variable userDateCreationCompte
    */
-  @NotNull
   @Column(name = "userDateCreationCompte")
   private LocalDate userDateCreationCompte;
 
   /**
    * Variable userDerniereConnexion
    */
-  @NotNull
   @Column(name = "userDerniereConnexion")
   private LocalDateTime userDerniereConnexion;
 
@@ -101,4 +101,36 @@ public class User {
    */
   @Column(name = "userMfaActif")
   private boolean userMfaActif;
+
+  /**
+   * Méthode initDateCreationCompte
+   *
+   *<i>de User</i>
+   *<h1></h1>
+   *<hr>
+   *<p>Cette méthode permet de setter la date de création de compte de
+   * l'utilisateur au moment même où la création du compte a lieu.
+   * Ainsi que de setter la date de dernière connexion à la création du compte</p>
+   */
+  // @PrePersist s'exécute juste avant que l'entité soit sauvegardée en BDD pour
+  // la première fois
+  @PrePersist
+  public void initDateCreationCompte() {
+    this.setUserDateCreationCompte(LocalDate.now());
+    this.setUserDerniereConnexion(LocalDateTime.now());
+  }
+
+  /**
+   * Méthode initDerniereConnexion
+   *
+   *<i>de User</i>
+   *<h1></h1>
+   *<hr>
+   *<p>Cette méthode permet de setter la date et l'heure de la dernière
+   * connexion que l'utilisateur a effectué</p>
+   */
+//  public void initDerniereConnexion() {
+//    this.setUserDerniereConnexion(LocalDateTime.now());
+//  }
+
 }

@@ -3,6 +3,7 @@ package fr.swif.codecase_api.exception;
 
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -155,8 +156,8 @@ public class ExceptionManager {
    *<i>de ExceptionManager</i>
    *<h1></h1>
    *<hr>
-   *<p>Méthode qui gère les erreurs de requête où la ressource est introuvable</p>
-   * @param exception Le type d'exception
+   *<p>Méthode qui gère les erreurs de requête dont la ressource est introuvable</p>
+   * @param noResourceFoundException Le type d'exception
    * @return Le statut avec le body qui contient le message récupéré de
    * MessageErreur + un message personnalisé
    */
@@ -166,15 +167,42 @@ public class ExceptionManager {
   // ResponseEntity est une classe Spring qui représente toute la réponse HTTP
   // que le controller va renvoyer
   public ResponseEntity<MessageClientApiErreur> handleExceptions(
-      NoResourceFoundException exception) {
+      NoResourceFoundException noResourceFoundException) {
     final MessagesErreur messagesErreur = MessagesErreur.NOT_FOUND;
     final HttpStatus status = messagesErreur.getHttpStatus();
 
     final String message = String.format("Ressource introuvable : '%s' sur la "
-        + "route '%s'.", exception.getHttpMethod(), exception.getResourcePath());
+        + "route '%s'.",
+        noResourceFoundException.getHttpMethod(),
+        noResourceFoundException.getResourcePath());
 
     final MessageClientApiErreur body =
         creationMessageClientApi(messagesErreur, message);
+
+    return ResponseEntity.status(status).body(body);
+  }
+
+  /**
+   * Méthode handleExceptions(AuthenticationException authenticationException)
+   *
+   *<i>de ExceptionManager</i>
+   *<h1></h1>
+   *<hr>
+   *<p></p>
+   * @param authenticationException Le type d'exception
+   * @return Le statut avec le body qui contient le message récupéré de
+   * MessageErreur
+   */
+  // @ExceptionHandler permet de définir la logique pour traiter et répondre aux
+  // exceptions traitées en paramètre
+  @ExceptionHandler(value = {AuthenticationException.class})
+  // ResponseEntity est une classe Spring qui représente toute la réponse HTTP
+  // que le controller va renvoyer
+  public ResponseEntity<MessageClientApiErreur> handleExceptions(
+      AuthenticationException authenticationException) {
+    final MessagesErreur messagesErreur = MessagesErreur.IDENTIFIANTS_USER_INVALIDES;
+    final HttpStatus status = messagesErreur.getHttpStatus();
+    final MessageClientApiErreur body = creationMessageClientApi(messagesErreur);
 
     return ResponseEntity.status(status).body(body);
   }

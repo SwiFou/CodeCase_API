@@ -14,7 +14,8 @@ import org.springframework.security.core.userdetails.UserDetails;
  * UserDetailsImpl
  * <i>de fr.swif.codecase_api.security</i>
  * <hr>
- * <p></p>
+ * <p>Cette classe permet de séparer la logique de persistance JPA de l'entité
+ * User de la logique de sécurité</p>
  *
  * @author Calderoli Alexandre
  * @version 0.0.1

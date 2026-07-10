@@ -36,7 +36,6 @@ import org.springframework.web.bind.annotation.RestController;
 // @RequiredArgsConstructor génère automatiquement un constructeur prenant
 // en paramètre tous les champs final et @NotNull de la classe
 @RequiredArgsConstructor
-
 public class UserRestController {
 
   private final UserService userService;

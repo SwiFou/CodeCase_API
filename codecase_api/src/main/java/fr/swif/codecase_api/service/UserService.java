@@ -4,6 +4,7 @@ import fr.swif.codecase_api.exception.CodeCaseApiException;
 import fr.swif.codecase_api.exception.MessagesErreur;
 import fr.swif.codecase_api.model.User;
 import fr.swif.codecase_api.repository.UserRepository;
+import java.time.LocalDateTime;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -91,11 +92,35 @@ public class UserService {
    */
   // @Transactional surcharge le readOnly de la classe
   @Transactional
-  public User saveUser(User user) throws CodeCaseApiException{
+  public User saveUser(User user) throws CodeCaseApiException {
     if(userRepository.findByUserEmail(user.getUserEmail()).isPresent()) {
       throw new CodeCaseApiException(MessagesErreur.USER_ALREADY_EXISTS);
     }
     return userRepository.save(user);
+  }
+
+  /**
+   * Méthode majDerniereConnexion
+   *
+   *<i>de UserService</i>
+   *<h1></h1>
+   *<hr>
+   *<p>Cette méthode permet de setter la date et l'heure de la dernière
+   * connexion que l'utilisateur a effectué</p>
+   * @param email L'adresse mail récupérée de l'utilisateur
+   * @throws CodeCaseApiException
+   */
+  // @Transactional surcharge le readOnly de la classe
+  @Transactional
+  public void majDerniereConnexion(String email) throws CodeCaseApiException {
+
+    User userActuel = userRepository.findByUserEmail(email)
+        .orElseThrow(
+            () ->new CodeCaseApiException(MessagesErreur.USER_NOT_FOUND));
+
+    userActuel.setUserDerniereConnexion(LocalDateTime.now());
+
+    userRepository.save(userActuel);
   }
 
   /**
@@ -111,6 +136,7 @@ public class UserService {
    * @return Le User modifié
    * @throws CodeCaseApiException
    */
+  // @Transactional surcharge le readOnly de la classe
   @Transactional
   public User updateUser(int id, User user) throws CodeCaseApiException {
 
