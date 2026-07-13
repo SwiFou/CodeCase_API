@@ -120,17 +120,5 @@ public class User {
     this.setUserDerniereConnexion(LocalDateTime.now());
   }
 
-  /**
-   * Méthode initDerniereConnexion
-   *
-   *<i>de User</i>
-   *<h1></h1>
-   *<hr>
-   *<p>Cette méthode permet de setter la date et l'heure de la dernière
-   * connexion que l'utilisateur a effectué</p>
-   */
-//  public void initDerniereConnexion() {
-//    this.setUserDerniereConnexion(LocalDateTime.now());
-//  }
 
 }

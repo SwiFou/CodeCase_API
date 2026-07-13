@@ -11,11 +11,9 @@ import java.util.HashMap;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,8 +42,9 @@ import org.springframework.web.bind.annotation.RestController;
 // de la réponse HTTP (JSON par défaut avec Jackson), au lieu d'être interprétée
 // comme un nom de vue Thymeleaf/JSP
 @RestController
-
-@RequestMapping("/user/auth")
+// @RequestMapping permet de définir le préfixe d'URL commun à toutes
+// les méthodes du controller en question
+@RequestMapping("/user/authentification")
 // @RequiredArgsConstructor génère automatiquement un constructeur prenant en
 // paramètre tous les champs final et @NotNull de la classe
 @RequiredArgsConstructor
@@ -75,7 +74,11 @@ public class AuthRestController {
   @PostMapping("/inscription")
   // ResponseEntity est une classe Spring qui représente toute la réponse HTTP
   // que le controller va renvoyer
+
   // @Valid permet de déclencher la Bean Validation sur l'objet qu'il annote
+
+  // Ici le type est ?, car la méthode peut renvoyer des corps de réponse de
+  // types différents selon les cas
   public ResponseEntity<?> inscription(@Valid @RequestBody User user) {
     if(userRepository.findByUserEmail(user.getUserEmail()).isPresent()) {
       return ResponseEntity.badRequest().body("L'adresse email est déjà utilisée");
@@ -85,23 +88,67 @@ public class AuthRestController {
     return ResponseEntity.ok(userRepository.save(user));
   }
 
-
+  /**
+   * Méthode connexion
+   *
+   *<i>de AuthRestController</i>
+   *<h1></h1>
+   *<hr>
+   *<p>Cette méthode permet à un utilisateur de se connecter par rapport à son
+   * adresse mail et son mot de passe</p>
+   * @param user Le User qui souhaite se connecter
+   * @return La réponse de connexion au compte
+   * @throws AuthenticationException
+   * @throws CodeCaseApiException
+   */
   @PostMapping("/connexion")
+  // ResponseEntity est une classe Spring qui représente toute la réponse HTTP
+  // que le controller va renvoyer
+
+  // Pas de @Valid ici sinon ça ferait déclencher les @NotBlank et @NotNull de
+  // variables qu'on ne veut pas manipuler pour cette méthode.
+
+  // Ici le type est ?, car la méthode peut renvoyer des corps de réponse de
+  // types différents selon les cas
   public ResponseEntity<?> connexion(@RequestBody User user)
       throws AuthenticationException, CodeCaseApiException {
 
+    // Si l'adresse mail ou le mot de passe sont null ou contiennent seulement
+    // des espaces, alors cela lève une exception.
     if(user.getUserEmail() == null || user.getUserEmail().isBlank() ||
     user.getUserMdp() == null || user.getUserMdp().isBlank()) {
       throw new CodeCaseApiException(MessagesErreur.IDENTIFIANTS_USER_INVALIDES);
     }
 
-    authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-            user.getUserEmail(), user.getUserMdp()));
+    /* authenticate() est la méthode de Spring Security qui va tenter
+    d'authentifier un objet Authentication fourni et renvoie un objet de même
+    type entièrement renseigné en cas de succès.
+    - Elle va ainsi chercher dans la BDD l'utilisateur dont l'email est renseigné
+    - Comparer le mot de passe fourni avec celui stocké en BDD :
+      - Si ça correspond, l'exécution continue
+      - Si ça ne correspond pas, lève une exception AuthenticationException */
+    authenticationManager.authenticate(
+        // UsernamePasswordAuthenticationToken est un objet de Spring Security
+        // qui représente une tentative d'authentification "non authentifiée"
+        new UsernamePasswordAuthenticationToken(
+            // Il embarque ici
+            user.getUserEmail(), // L'adresse mail du User
+            user.getUserMdp() // Le mot de passe du User
+        )
+    );
 
+    // Création d'une Map<> → C'est une structure de données qui stock des
+    // paires clé-valeur. Avec Map<> on peut accéder aux éléments directement
+    // via les clés contrairement à List<> (par index numérique).
     Map<String, Object> authData = new HashMap<>();
+    // Clé → token | Valeur → le token généré par la méthode genererToken()
     authData.put("token", jwtUtils.genererToken(user.getUserEmail()));
+    // Clé → type | Valeur → Bearer (convention standard pour indiquer au
+    // client qu'il doit envoyer ce token dans le header
+    // Authorization: Bearer <token> pour les requêtes suivantes)
     authData.put("type", "Bearer");
 
+    // Mise à jour de la dernière connexion
     userService.majDerniereConnexion(user.getUserEmail());
 
     return ResponseEntity.ok(authData);

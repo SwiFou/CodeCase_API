@@ -59,44 +59,92 @@ public class SecurityConfig {
   }
 
   /**
-   *
+   * Méthode authenticationManager
    *
    *<i>de SecurityConfig</i>
    *<h1></h1>
    *<hr>
-   *<p>Méthode permettant d'authentifier les utilisateurs.
-   * Depuis Spring Security 7, plus besoin de throws Exception car c'est devenue
-   * une unchecked exception</p>
-   * @param httpSecurity
-   * @param mdpEncoder
-   * @return
+   *<p>Méthode permettant de vérifier une tentative d'authentification et de
+   * dire si elle est valide ou non.
+   * Depuis Spring Security 7, plus besoin de throws Exception, car c'est
+   * devenue une unchecked exception</p>
+   * @param httpSecurity Objet de configuration de Spring Security permettant de
+   *                     récupérer l'AuthenticationManagerBuilder partagé
+   * @param mdpEncoder Encodeur utilisé pour comparer le mot de passe saisi avec
+   *                   celui qui est stocké en BDD
+   * @return AuthenticationManager configuré avec le service utilisateur et
+   * l'encodeur de mot de passe
    */
   // @Bean sert à déclarer manuellement un bean Spring (c'est un objet géré par
   // le conteneur Ioc)
   @Bean
   public AuthenticationManager authenticationManager(
       HttpSecurity httpSecurity, PasswordEncoder mdpEncoder) {
+
     AuthenticationManagerBuilder authenticationManagerBuilder =
+        /* getSharedObject() récupère un objet partagé que Spring Security
+        attache automatiquement à HttpSecurity pendant
+        la phase de configuration */
+
+        /* AuthenticationManagerBuilder est un objet "constructeur" :
+        il permet de définir comment l'authentification doit se faire
+        (quelle source d'utilisateurs, quel encodeur de mot de passe)
+        avant de fabriquer le vrai AuthenticationManager */
         httpSecurity.getSharedObject(AuthenticationManagerBuilder.class);
 
     authenticationManagerBuilder
+        /* Indique comment retrouver un User à partir de son identifiant et
+        de son mot de passe */
         .userDetailsService(customUserDetailsService)
+        /* Indique comment comparer le mot de passe saisi avec celui hashé
+        en BDD */
         .passwordEncoder(mdpEncoder);
 
+    // Fabrication de l'objet AuthenticationManager
     return authenticationManagerBuilder.build();
   }
 
-
+  /**
+   * Méthode securityFilterChain
+   *
+   *<i>de SecurityConfig</i>
+   *<h1></h1>
+   *<hr>
+   *<p>Cette méthode sert à définir la configuration de sécurité HTTP appliquée
+   * à toutes les requêtes entrantes de l'application</p>
+   * @param httpSecurity Objet permettant de configurer les règles de sécurité
+   *                     HTTP (CSRF, autorisations, filtres)
+   * @return SecurityFilterChain construit, avec application des règles de
+   * sécurité pour toutes les requêtes HTTP de l'application
+   */
   // @Bean sert à déclarer manuellement un bean Spring (c'est un objet géré par
   // le conteneur Ioc)
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) {
-    return httpSecurity.csrf(AbstractHttpConfigurer::disable)
-        .authorizeHttpRequests(auth ->
-            auth.requestMatchers("/user/auth/*").permitAll()
-                .anyRequest().authenticated())
+    return httpSecurity
+        /* On désactive le CSRF ici, car c'est une authentification stateless
+        (sans état). Il n'y a pas séssion crée par le serveur, le token JWT est
+        généré puis stocké dans le client (localStorage, mémoire, etc.) et
+        à chaque nouvelle requête le token est lu par JwtFiltre et est vérifié
+        par JwtUtils. */
+        .csrf(AbstractHttpConfigurer::disable)
+        // authorizeHttpRequests permet de définir les règles d'autorisation
+        .authorizeHttpRequests(
+            authorize ->
+            authorize
+                // Les requêtes suivantes sont accessibles sans authentification
+                .requestMatchers("/user/authentification/inscription").permitAll()
+                .requestMatchers("/user/authentification/connexion").permitAll()
+                // Pour toutes les autres requêtes
+                .anyRequest()
+                // Il faut être authentifié
+                .authenticated())
+        // addFilterBefore permet de constituer le filtre personnalisé avant
+        // l'exécution du filtre standard de Spring Security
+        // (Il est obligatoire de mettre UsernamePasswordAuthenticationFilter)
         .addFilterBefore(new JwtFiltre(customUserDetailsService, jwtUtils),
             UsernamePasswordAuthenticationFilter.class)
+        // Construction et retourne l'objet SecurityFilterChain configuré
         .build();
   }
 
