@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -128,6 +129,12 @@ public class SecurityConfig {
         à chaque nouvelle requête le token est lu par JwtFiltre et est vérifié
         par JwtUtils. */
         .csrf(AbstractHttpConfigurer::disable)
+        /* SessionCreationPolicy.STATELESS permet de ne jamais créer de session
+         HTTP côté serveur quoi qu'il arrive (si rien n'est mis, par défaut
+         c'est IF_RQUIRED → créer une session seulement si un mécanisme interne
+         en a besoin) */
+        .sessionManagement(session ->
+            session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         // authorizeHttpRequests permet de définir les règles d'autorisation
         .authorizeHttpRequests(
             authorize ->
@@ -135,13 +142,14 @@ public class SecurityConfig {
                 // Les requêtes suivantes sont accessibles sans authentification
                 .requestMatchers("/user/authentification/inscription").permitAll()
                 .requestMatchers("/user/authentification/connexion").permitAll()
+                .requestMatchers("/user/authentification/deconnexion").permitAll()
                 // Pour toutes les autres requêtes
                 .anyRequest()
                 // Il faut être authentifié
                 .authenticated())
-        // addFilterBefore permet de constituer le filtre personnalisé avant
-        // l'exécution du filtre standard de Spring Security
-        // (Il est obligatoire de mettre UsernamePasswordAuthenticationFilter)
+        /* addFilterBefore permet de constituer le filtre personnalisé avant
+        l'exécution du filtre standard de Spring Security
+        (Il est obligatoire de mettre UsernamePasswordAuthenticationFilter) */
         .addFilterBefore(new JwtFiltre(customUserDetailsService, jwtUtils),
             UsernamePasswordAuthenticationFilter.class)
         // Construction et retourne l'objet SecurityFilterChain configuré

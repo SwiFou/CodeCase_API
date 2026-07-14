@@ -6,6 +6,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -57,7 +58,7 @@ public class JwtFiltre extends OncePerRequestFilter {
     final String authHeader = request.getHeader("Authorization");
 
     String eMail = null;
-    String jwt = null;
+    String jwt = extractionJwtDeCookies(request);
 
     if(authHeader != null && authHeader.startsWith("Bearer ")) {
       // Permet d'extraire les 7 premiers caractères du Header
@@ -121,5 +122,33 @@ public class JwtFiltre extends OncePerRequestFilter {
     // il ne bloque jamais
     filterChain.doFilter(request, response);
 
+  }
+
+  /**
+   * Méthode extractionJwtDeCookies
+   *
+   *<i>de JwtFiltre</i>
+   *<h1></h1>
+   *<hr>
+   *<p>Cette méthode permet d'extraire la valeur du token JWT depuis les cookies
+   * de la requête entrante</p>
+   * @param request La requête HTTP entrante
+   * @return Le token JWT s'il est présent dans les cookies, sinon null
+   */
+  private String extractionJwtDeCookies(HttpServletRequest request) {
+
+    Cookie[] cookies = request.getCookies();
+
+    if(cookies == null) {
+      return null;
+    }
+
+    for(Cookie cookie : cookies) {
+      if("jwt".equals(cookie.getName())) {
+        return cookie.getValue();
+      }
+    }
+
+    return null;
   }
 }

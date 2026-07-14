@@ -7,10 +7,10 @@ import fr.swif.codecase_api.model.User;
 import fr.swif.codecase_api.repository.UserRepository;
 import fr.swif.codecase_api.service.UserService;
 import jakarta.validation.Valid;
-import java.util.HashMap;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -137,22 +137,38 @@ public class AuthRestController {
         )
     );
 
-    // Création d'une Map<> → C'est une structure de données qui stock des
-    // paires clé-valeur. Avec Map<> on peut accéder aux éléments directement
-    // via les clés contrairement à List<> (par index numérique).
-    Map<String, Object> authData = new HashMap<>();
-    // Clé → token | Valeur → le token généré par la méthode genererToken()
-    authData.put("token", jwtUtils.genererToken(user.getUserEmail()));
-    // Clé → type | Valeur → Bearer (convention standard pour indiquer au
-    // client qu'il doit envoyer ce token dans le header
-    // Authorization: Bearer <token> pour les requêtes suivantes)
-    authData.put("type", "Bearer");
+    // Génération du cookie contenant le JWT, à poser sur la réponse
+    ResponseCookie cookie = jwtUtils.genererCookieJwt(user.getUserEmail());
 
     // Mise à jour de la dernière connexion
     userService.majDerniereConnexion(user.getUserEmail());
 
-    return ResponseEntity.ok(authData);
+    return ResponseEntity.ok()
+        /* header() ajoute le SET_COOKIE à la réponse HTTP. C'est ce header
+        que le navigateur interprète pour stocker le cookie côté client */
+        .header(HttpHeaders.SET_COOKIE, cookie.toString())
+        .body("Connexion réussie");
 
+  }
+
+  /**
+   * Méthode deconnexion
+   *
+   *<i>de AuthRestController</i>
+   *<h1></h1>
+   *<hr>
+   *<p>Cette méthode permet à un utilisateur de se déconnecter en supprimant
+   * le cookie contenant le token JWT</p>
+   * @return Le réponse de déconnexion
+   */
+  @PostMapping("/deconnexion")
+  public ResponseEntity<?> deconnexion() {
+
+    ResponseCookie cookie = jwtUtils.genererCookieVideJwt();
+
+    return ResponseEntity.ok()
+        .header(HttpHeaders.SET_COOKIE, cookie.toString())
+        .body("Déconnexion réussie");
   }
 
 }

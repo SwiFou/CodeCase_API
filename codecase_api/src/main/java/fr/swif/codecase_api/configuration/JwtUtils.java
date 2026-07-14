@@ -1,25 +1,17 @@
 package fr.swif.codecase_api.configuration;
 
-import fr.swif.codecase_api.security.UserDetailsImpl;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.Jwts.SIG;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.security.SignatureException;
 import java.nio.charset.StandardCharsets;
-import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -227,5 +219,54 @@ public class JwtUtils {
         .getPayload(); // Récupère les claims (payload) du token
   }
 
+  /**
+   * Méthode genererCookieJwt
+   *
+   *<i>de JwtUtils</i>
+   *<h1></h1>
+   *<hr>
+   *<p>Cette méthode permet de générer un cookie httpOnly contenant le token JWT
+   * de l'utilisateur, destiné à être posé sur la réponse HTTP lors de la
+   * connexion.</p>
+   * @param userEmail L'adresse mail du User, utilisé pour générer le token
+   * @return Le cookie contenant le token JWT, prêt à être ajouté à la réponse
+   */
+  public ResponseCookie genererCookieJwt(String userEmail) {
+
+    String token = genererToken(userEmail);
+
+    return ResponseCookie.from("jwt", token)
+        // Le cookie est envoyé pour toutes les routes du domaine
+        .path("/")
+        // httpOnly empêche JavaScript de lire le cookie (protection XSS)
+        .httpOnly(true)
+        /* maxAge attend une durée en secondes, alors qu'expirationTime est en
+        millisecondes */
+        .maxAge(expirationTime / 1000)
+        .build();
+  }
+
+  /**
+   * Méthode genererCookieVideJwt
+   *
+   *<i>de JwtUtils</i>
+   *<h1></h1>
+   *<hr>
+   *<p>Cette méthode permet de générer un cookie "vide" avec une durée de vie
+   * nulle, ce qui indique au navigateur de supprimer immédiatement le cookie
+   * JWT existant. Utilisée lors de la déconnexion</p>
+   * @return Le cookie de nettoyage, prêt à être ajouté à la réponse
+   */
+  public ResponseCookie genererCookieVideJwt() {
+    return ResponseCookie.from("jwt", "")
+        /* Le path et le nom sont identiques au cookie posé à la connexion,
+        sinon le navigateur considère qu'il s'agit d'un cookie différent. */
+        .path("/")
+        // httpOnly empêche JavaScript de lire le cookie (protection XSS)
+        .httpOnly(true)
+        // maxAge à 0 = suppression immédiate du cookie par le navigateur
+        .maxAge(0)
+        .build();
+  }
 
 }
