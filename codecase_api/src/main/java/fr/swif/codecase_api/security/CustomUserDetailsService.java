@@ -2,10 +2,7 @@ package fr.swif.codecase_api.security;
 
 import fr.swif.codecase_api.model.User;
 import fr.swif.codecase_api.repository.UserRepository;
-import java.util.Collections;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

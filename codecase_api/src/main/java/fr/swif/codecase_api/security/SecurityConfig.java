@@ -143,6 +143,7 @@ public class SecurityConfig {
                 .requestMatchers("/user/authentification/inscription").permitAll()
                 .requestMatchers("/user/authentification/connexion").permitAll()
                 .requestMatchers("/user/authentification/deconnexion").permitAll()
+                .requestMatchers("/").permitAll()
                 // Pour toutes les autres requêtes
                 .anyRequest()
                 // Il faut être authentifié

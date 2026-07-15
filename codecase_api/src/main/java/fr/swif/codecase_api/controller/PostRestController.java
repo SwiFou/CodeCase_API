@@ -1,7 +1,6 @@
 package fr.swif.codecase_api.controller;
 
 import fr.swif.codecase_api.exception.CodeCaseApiException;
-import fr.swif.codecase_api.exception.ExceptionManager;
 import fr.swif.codecase_api.model.Post;
 import fr.swif.codecase_api.service.PostService;
 import jakarta.validation.Valid;

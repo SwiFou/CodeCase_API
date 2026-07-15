@@ -25,7 +25,13 @@ import org.springframework.web.bind.annotation.RestController;
  * AuthRestController
  * <i>de fr.swif.codecase_api.controller</i>
  * <hr>
- * <p></p>
+ * <p>RestController qui prend en compte les méthodes inscription(), connexion()
+ * et deconnexion().
+ * Quand une connexion est active, le cookie JWT est stocké 1 seule fois par
+ * navigateur. La déconnexion va venir supprimer le cookie courant pour le
+ * remplacer par un cookie vide.
+ * Par contre, si un cookie JWT est volé avant la déconnexion, il est toujours
+ * valide jusqu'à sa date d'expiration.</p>
  *
  * @author Calderoli Alexandre
  * @version 0.0.1

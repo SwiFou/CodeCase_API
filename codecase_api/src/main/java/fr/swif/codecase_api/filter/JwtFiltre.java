@@ -10,6 +10,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -58,12 +59,16 @@ public class JwtFiltre extends OncePerRequestFilter {
     final String authHeader = request.getHeader("Authorization");
 
     String eMail = null;
+    // Récupération du token depuis le cookie "jwt" de la requête
     String jwt = extractionJwtDeCookies(request);
 
     if(authHeader != null && authHeader.startsWith("Bearer ")) {
       // Permet d'extraire les 7 premiers caractères du Header
       // (donc de "Bearer ")
       jwt = authHeader.substring(7);
+    }
+
+    if(jwt != null) {
       try {
         eMail = jwtUtils.extractEmail(jwt);
       } catch (ExpiredJwtException eje) {
@@ -73,7 +78,6 @@ public class JwtFiltre extends OncePerRequestFilter {
         log.warn("Tentative d'authentification avec un token JWT invalide : {}",
             e.getMessage());
       }
-
     }
 
     // Sert à vérifier si l'email de l'utilisateur n'est pas null et
