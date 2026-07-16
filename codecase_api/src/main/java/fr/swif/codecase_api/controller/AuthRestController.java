@@ -3,8 +3,10 @@ package fr.swif.codecase_api.controller;
 import fr.swif.codecase_api.configuration.JwtUtils;
 import fr.swif.codecase_api.exception.CodeCaseApiException;
 import fr.swif.codecase_api.exception.MessagesErreur;
+import fr.swif.codecase_api.model.Role;
 import fr.swif.codecase_api.model.User;
 import fr.swif.codecase_api.repository.UserRepository;
+import fr.swif.codecase_api.security.UserDetailsImpl;
 import fr.swif.codecase_api.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +16,7 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -91,6 +94,10 @@ public class AuthRestController {
     }
     user.setUserMdp(passwordEncoder.encode(user.getUserMdp()));
 
+    // Pour l'instant on set le Role à MEMBRE pour tous les User qui
+    // s'inscrivent. Les autres rôles seront setter plus tard
+    user.setUserRole(Role.MEMBRE);
+
     return ResponseEntity.ok(userRepository.save(user));
   }
 
@@ -133,7 +140,7 @@ public class AuthRestController {
     - Comparer le mot de passe fourni avec celui stocké en BDD :
       - Si ça correspond, l'exécution continue
       - Si ça ne correspond pas, lève une exception AuthenticationException */
-    authenticationManager.authenticate(
+    Authentication authentication = authenticationManager.authenticate(
         // UsernamePasswordAuthenticationToken est un objet de Spring Security
         // qui représente une tentative d'authentification "non authentifiée"
         new UsernamePasswordAuthenticationToken(
@@ -143,8 +150,16 @@ public class AuthRestController {
         )
     );
 
+    // On récupère l'utilisateur authentifié et on le convertit dans le bon type
+    // pour pouvoir accéder à son rôle
+    UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+    // name() est une méthode qui permet de renvoyer le nom de la constante
+    // d'une Enum sous forme de chaîne de caractères
+    //! getUser peut être null
+    String role = userDetails.getUser().getUserRole().name();
+
     // Génération du cookie contenant le JWT, à poser sur la réponse
-    ResponseCookie cookie = jwtUtils.genererCookieJwt(user.getUserEmail());
+    ResponseCookie cookie = jwtUtils.genererCookieJwt(user.getUserEmail(), role);
 
     // Mise à jour de la dernière connexion
     userService.majDerniereConnexion(user.getUserEmail());

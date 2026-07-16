@@ -1,5 +1,6 @@
 package fr.swif.codecase_api.model;
 
+import fr.swif.codecase_api.configuration.RoleRequis;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -71,7 +72,9 @@ public class User {
   /**
    * Variable userRole
    */
-  @NotNull
+  // @NotNull → de base le groups est mis en default
+  @NotNull(message = "userRole : ne doit pas être null",
+      groups = RoleRequis.class)
   @Enumerated(EnumType.STRING) // Permet de stocker
                               // "VISITEUR"/"USER"/"MODO"/"ADMIN" au lieu de 0/1
   @Column(name = "userRole")
