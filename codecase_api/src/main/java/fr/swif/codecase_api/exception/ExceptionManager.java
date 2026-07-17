@@ -24,12 +24,13 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
  * @since 12/06/2026
  */
 
+// @Slf4j permet de générer un champ de log
+@Slf4j
 // @RestControllerAdvice est la combinaison de :
 // - @ControllerAdvice, qui intercepte les exceptions levées par les controllers
 // et permet de retourner n'importe quel type de réponse
 // - @ResponseBody, qui permet que la valeur retour soit sérialisée en JSON
 // automatiquement
-@Slf4j
 @RestControllerAdvice
 public class ExceptionManager {
 
