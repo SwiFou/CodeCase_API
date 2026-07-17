@@ -57,6 +57,7 @@ public class User {
   /**
    * Variable userMdp
    */
+  @NotBlank
   @PersonalData(usage = "authentification", categorie = "contact")
   @Column(name = "userMdp")
   private String userMdp;
@@ -64,6 +65,7 @@ public class User {
   /**
    * Variable userEmail
    */
+  @NotBlank
   @PersonalData(usage = "authentification", categorie = "contact")
   @Email
   @Column(name = "userEmail")

@@ -145,6 +145,8 @@ public class SecurityConfig {
                 .requestMatchers("/user/authentification/deconnexion").permitAll()
                 .requestMatchers("/").permitAll()
                 .requestMatchers("/posts").permitAll()
+                .requestMatchers("/langages").permitAll()
+                .requestMatchers("/technologies").permitAll()
                 // Pour toutes les autres requêtes
                 .anyRequest()
                 // Il faut être authentifié

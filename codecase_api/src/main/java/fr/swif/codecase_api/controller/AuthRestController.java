@@ -19,6 +19,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -126,13 +127,6 @@ public class AuthRestController {
   public ResponseEntity<?> connexion(@RequestBody User user)
       throws AuthenticationException, CodeCaseApiException {
 
-    // Si l'adresse mail ou le mot de passe sont null ou contiennent seulement
-    // des espaces, alors cela lève une exception.
-    if(user.getUserEmail() == null || user.getUserEmail().isBlank() ||
-    user.getUserMdp() == null || user.getUserMdp().isBlank()) {
-      throw new CodeCaseApiException(MessagesErreur.IDENTIFIANTS_USER_INVALIDES);
-    }
-
     /* authenticate() est la méthode de Spring Security qui va tenter
     d'authentifier un objet Authentication fourni et renvoie un objet de même
     type entièrement renseigné en cas de succès.
@@ -152,14 +146,19 @@ public class AuthRestController {
 
     // On récupère l'utilisateur authentifié et on le convertit dans le bon type
     // pour pouvoir accéder à son rôle
-    UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+    UserDetailsImpl userDetailsImpl =
+        (UserDetailsImpl) authentication.getPrincipal();
+
     // name() est une méthode qui permet de renvoyer le nom de la constante
     // d'une Enum sous forme de chaîne de caractères
-    //! getUser peut être null
-    String role = userDetails.getUser().getUserRole().name();
+    String role = userDetailsImpl.getUser().getUserRole().name();
+
+    // On prend aussi l'id du User
+    Integer userId = userDetailsImpl.getUser().getUserId();
 
     // Génération du cookie contenant le JWT, à poser sur la réponse
-    ResponseCookie cookie = jwtUtils.genererCookieJwt(user.getUserEmail(), role);
+    ResponseCookie cookie = jwtUtils.genererCookieJwt(user.getUserEmail(),
+        userId, role);
 
     // Mise à jour de la dernière connexion
     userService.majDerniereConnexion(user.getUserEmail());

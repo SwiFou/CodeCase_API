@@ -58,9 +58,11 @@ public class JwtUtils {
    * @param role Le rôle de l'utilisateur, ajouté en tant que claim
    * @return Le token JWT signé sous forme de chaîne compactée
    */
-  public String genererToken(String userEmail, String role) {
+  public String genererToken(String userEmail, Integer userId, String role) {
     // Map<> est une collection d'associations clé-valeur
     Map<String, Object> claims = new HashMap<>();
+    // Ajout du userId dans la Map
+    claims.put("userId", userId);
     // Ajout du role du User dans la Map
     claims.put("role", role);
     return creerToken(claims, userEmail);
@@ -231,9 +233,10 @@ public class JwtUtils {
    * @param userEmail L'adresse mail du User, utilisé pour générer le token
    * @return Le cookie contenant le token JWT, prêt à être ajouté à la réponse
    */
-  public ResponseCookie genererCookieJwt(String userEmail, String role) {
+  public ResponseCookie genererCookieJwt(String userEmail, Integer userId,
+      String role) {
 
-    String token = genererToken(userEmail, role);
+    String token = genererToken(userEmail, userId, role);
 
     return ResponseCookie.from("jwt", token)
         // Le cookie est envoyé pour toutes les routes du domaine
