@@ -60,6 +60,7 @@ CREATE TABLE Post(
    postContenu VARCHAR(5000) NOT NULL,
    postDateCreation DATETIME NOT NULL,
    postDescription VARCHAR(100) NOT NULL,
+   technologieId INT NOT NULL,
    langageId INT NOT NULL,
    userId INT NOT NULL,
    PRIMARY KEY(postId),
@@ -112,6 +113,7 @@ CREATE TABLE Etre_dans(
    FOREIGN KEY(bibliothequeID) REFERENCES Bibliotheque(bibliothequeID)
 )ENGINE=InnoDB;
 
+
 INSERT INTO codecase_stage.Langage (langageId, langageIntitule) VALUES(3, 'CSS');
 INSERT INTO codecase_stage.Langage (langageId, langageIntitule) VALUES(4, 'HTML');
 INSERT INTO codecase_stage.Langage (langageId, langageIntitule) VALUES(2, 'Java');
@@ -126,5 +128,5 @@ VALUES(1, 'SwiF', 'Alexandre', '2026-04-15', '2026-04-15 13:58:37.000000','alexa
 INSERT INTO codecase_stage.Technologie (technologieId, technologieIntitule, userId) VALUES(1, 'Springboot', 1);
 
 INSERT INTO codecase_stage.Post
-(postId, postTitre, postContenu, postDateCreation, postDescription, langageId, userId)
-VALUES (1, 'test', 'test test test', '2026-04-20 13:58:37.000000', 'Cest un test', 2, 1);
+(postId, postTitre, postContenu, postDateCreation, postDescription, langageId, userId, technologieId)
+VALUES (1, 'test', 'test test test', '2026-04-20 13:58:37.000000', 'Cest un test', 2, 1, 1);
