@@ -121,7 +121,7 @@ INSERT INTO codecase_stage.Langage (langageId, langageIntitule) VALUES(5, 'Ruby'
 
 INSERT INTO codecase_stage.User_
 (userId, userPseudo, userMdp, userDateCreationCompte, userDerniereConnexion, userEmail, userRole, userMfaActif, userAvatar)
-VALUES(1, 'SwiF', 'Alexandre', '2026-04-15', '2026-04-15','alexandre@test.fr', 'MEMBRE', '1', 'avatar.png');
+VALUES(1, 'SwiF', 'Alexandre', '2026-04-15', '2026-04-15 13:58:37.000000','alexandre@test.fr', 'MEMBRE', '1', 'avatar.png');
 
 INSERT INTO codecase_stage.Technologie (technologieId, technologieIntitule, userId) VALUES(1, 'Springboot', 1);
 
