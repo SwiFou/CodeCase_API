@@ -246,6 +246,12 @@ public class JwtUtils {
         /* maxAge attend une durée en secondes, alors qu'expirationTime est en
         millisecondes */
         .maxAge(expirationTime / 1000)
+        /* sameSite("Strict") permet de contrer les failles CSRF. C'est-à-dire
+        que le cookie n'est jamais envoyé dans les requêtes inter-sites.
+        C'est le niveau de protection le plus élevé, mais aussi le plus
+        contraignant, par exemple : si quelqu'un partage un lien vers votre
+        espace client bancaire, vous arriverez déconnecté.*/
+        .sameSite("Strict")
         .build();
   }
 
