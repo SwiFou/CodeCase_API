@@ -231,6 +231,8 @@ public class JwtUtils {
    * de l'utilisateur, destiné à être posé sur la réponse HTTP lors de la
    * connexion.</p>
    * @param userEmail L'adresse mail du User, utilisé pour générer le token
+   * @param userId L'id du User, utilisé pour générer le token
+   * @param role Le rôle du User, utilisé pour générer le token
    * @return Le cookie contenant le token JWT, prêt à être ajouté à la réponse
    */
   public ResponseCookie genererCookieJwt(String userEmail, Integer userId,
