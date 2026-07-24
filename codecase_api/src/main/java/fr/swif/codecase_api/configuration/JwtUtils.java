@@ -263,7 +263,7 @@ public class JwtUtils {
    *<i>de JwtUtils</i>
    *<h1></h1>
    *<hr>
-   *<p>Cette méthode permet de générer un cookie "vide" avec une durée de vie
+   *<p>Cette méthode permet de "générer un cookie vide" avec une durée de vie
    * nulle, ce qui indique au navigateur de supprimer immédiatement le cookie
    * JWT existant. Utilisée lors de la déconnexion</p>
    * @return Le cookie de nettoyage, prêt à être ajouté à la réponse
