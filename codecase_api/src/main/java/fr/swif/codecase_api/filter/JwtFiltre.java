@@ -143,16 +143,19 @@ public class JwtFiltre extends OncePerRequestFilter {
 
     Cookie[] cookies = request.getCookies();
 
+    // Si aucun cookie dans la requête
     if(cookies == null) {
       return null;
     }
 
+    // Si le cookie "jwt" existe, on renvoie sa valeur (le token)
     for(Cookie cookie : cookies) {
       if("jwt".equals(cookie.getName())) {
         return cookie.getValue();
       }
     }
 
+    // S'il y a des cookies, mais aucun ne s'appelle "jwt"
     return null;
   }
 }
