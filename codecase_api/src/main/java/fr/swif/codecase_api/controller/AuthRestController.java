@@ -2,7 +2,6 @@ package fr.swif.codecase_api.controller;
 
 import fr.swif.codecase_api.configuration.JwtUtils;
 import fr.swif.codecase_api.exception.CodeCaseApiException;
-import fr.swif.codecase_api.exception.MessagesErreur;
 import fr.swif.codecase_api.model.Role;
 import fr.swif.codecase_api.model.User;
 import fr.swif.codecase_api.repository.UserRepository;
@@ -19,7 +18,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
